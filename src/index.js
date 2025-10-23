@@ -13,10 +13,15 @@ let currentWeatherData = null;
 submitQueryFormButton.addEventListener('click', () => {
   const query = domManager.getQueryFormData();
   const request = weatherApi.createRequest(query);
-  weatherApi.getWeatherData(request).then((weatherData) => {
-    currentWeatherData = weatherData;
-    domManager.updateAllSections(currentWeatherData.getData());
-  });
+  weatherApi
+    .getWeatherData(request)
+    .then((weatherData) => {
+      currentWeatherData = weatherData;
+      domManager.updateAllSections(currentWeatherData.getData());
+    })
+    .catch(() => {
+      alert('It was not possible to find this location.');
+    });
 });
 
 submitUnitsFormButton.addEventListener('click', () => {

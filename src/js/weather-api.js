@@ -15,13 +15,12 @@ function createRequest(location) {
 }
 
 async function fetchData(request) {
-  try {
-    const response = await fetch(request);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
+  const response = await fetch(request);
+  if (!response.ok) {
+    throw Error(`Not successful response. Status: ${response.status}`);
   }
+  const data = await response.json();
+  return data;
 }
 
 async function getWeatherData(request) {
