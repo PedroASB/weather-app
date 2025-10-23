@@ -19,6 +19,11 @@ export default class WeatherData {
   }
 
   #processData(rawData) {
+    if (!rawData) {
+      console.error('Invalid raw data at proccess data method.');
+      return;
+    }
+
     const days = [];
 
     for (const day of rawData.days) {
