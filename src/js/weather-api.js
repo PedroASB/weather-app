@@ -2,7 +2,7 @@ export { createRequest, getWeatherData };
 
 const API_KEY = 'ZNUHVB5T8SUGMLTYE5U3XSPFM';
 const UNIT_GROUP = 'us';
-const DATE = 'next10days';
+const DATE = 'next9days';
 
 function createRequest(location) {
   const baseUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/`;
@@ -23,40 +23,53 @@ async function fetchData(request) {
 }
 
 function processWeatherData(data) {
-  const forecast = {};
+  const days = [];
 
-  data.days.forEach((day) => {
-    forecast[day.datetime] = {
-      icon: day.icon,
-      tempmin: day.tempmin,
-      tempmax: day.tempmax,
-    };
-  });
+  for (const day of data.days) {
+    days.push({
+      date: day.datetime,
+      icon: '[icon]', // temporary
+      tempMin: day.tempmin,
+      tempMax: day.tempmax,
+    });
+  }
 
   const currentConditions = {
     icon: data.currentConditions.icon,
-    datetime: data.currentConditions.datetime,
+    time: data.currentConditions.datetime,
     conditions: data.currentConditions.conditions,
     temp: data.currentConditions.temp,
-    feelslike: data.currentConditions.feelslike,
+    feelsLike: data.currentConditions.feelslike,
     humidity: data.currentConditions.humidity,
     precip: data.currentConditions.precip,
-    precipprob: data.currentConditions.precipprob,
-    uvindex: data.currentConditions.uvindex,
+    precipProb: data.currentConditions.precipprob,
+    uvIndex: data.currentConditions.uvindex,
     pressure: data.currentConditions.pressure,
-    windspeed: data.currentConditions.windspeed,
-    winddir: data.currentConditions.winddir,
+    windSpeed: data.currentConditions.windspeed,
+    windDir: data.currentConditions.winddir,
     sunrise: data.currentConditions.sunrise,
     sunset: data.currentConditions.sunset,
   };
 
+  const currentDay = { hours: [] };
+
+  for (const hour of data.days[0].hours) {
+    currentDay.hours.push({
+      time: hour.datetime,
+      temp: hour.temp,
+      precipProb: hour.precipprob,
+      icon: '[icon]', // temporary
+    });
+  }
+
   const processedData = {
-    resolvedAddress: data.resolvedAddress,
+    location: data.resolvedAddress,
     description: data.description,
     timeZoneOffset: data.tzoffset,
     alerts: data.alerts,
     currentConditions,
-    forecast,
+    days,
+    currentDay,
   };
 
   return processedData;

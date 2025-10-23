@@ -3,7 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Weather App</title>
   </head>
-  <body></body>
+  <body>
+    <h1 id="main-title">Weather App</h1>
+
+    <div id="main-info" class="card">
+      <div class="location"><span>New York</span></div>
+      <div class="temperature"><span>25</span>°F</div>
+      <div class="feels-like">Feels like <span></span>°F</div>
+      <div class="conditions"><span>Partly Cloudy</span></div>
+    </div>
+
+    <form id="query-form" method="dialog" novalidate>
+      <label for="query">
+        <span>Location: </span>
+        <input type="text" name="query" id="query" placeholder="Enter a location" />
+      </label>
+      <button type="submit">Done</button>
+    </form>
+
+    <div class="container">
+      <div class="card" id="hourly-forecast">
+        <div class="title">Hourly forecast</div>
+        <div class="content">
+          <div class="description"></div>
+          <div class="hours"></div>
+        </div>
+      </div>
+      <div class="card" id="day-forecast">
+        <div class="title">10-day forecast</div>
+        <div class="content"></div>
+      </div>
+      <div class="card" id="precipitation">
+        <div class="title">Precipitation</div>
+        <div class="content">
+          <div class="precip-level">Precipitation: <span>?</span> in</div>
+          <div class="precip-prob">Precipitation chance: <span>?</span>%</div>
+        </div>
+      </div>
+      <div class="card" id="sunrise-sunset">
+        <div class="title">Sunrise & sunset</div>
+        <div class="content">
+          <div class="sunrise-time">Sunrise time: <span>?</span></div>
+          <div class="sunset-time">Sunset time: <span>?</span></div>
+        </div>
+      </div>
+      <div class="card" id="humidity">
+        <div class="title">Humidity</div>
+        <div class="air-humidity">Air humidity: <span>?</span>%</div>
+      </div>
+      <div class="card" id="pressure">
+        <div class="title">Pressure</div>
+        <div class="air-pressure">Air pressure: <span>?</span> mb</div>
+      </div>
+      <div class="card" id="wind">
+        <div class="title">Wind</div>
+        <div class="content">
+          <div class="wind-speed">Wind speed: <span>?</span> mph</div>
+          <div class="wind-direction">Wind direction: <span>?</span>°</div>
+        </div>
+      </div>
+      <div class="card" id="uv-index">
+        <div class="title">UV Index</div>
+        <div class="uv-index">UV Index: <span>?</span></div>
+      </div>
+    </div>
+    <div class="footer">
+      <a href="https://github.com/PedroASB">&copy; 2025 Pedro Augusto</a>
+    </div>
+  </body>
 </html>
