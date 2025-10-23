@@ -1,9 +1,18 @@
-export function getFormData() {
+export function getQueryFormData() {
   const form = document.querySelector('#query-form');
   const formData = new FormData(form);
   const query = formData.get('query');
   form.reset();
   return query;
+}
+
+export function getUnitsFormData() {
+  const form = document.querySelector('#units-form');
+  const formData = new FormData(form);
+  const temperatureUnit = formData.get('temperature-unit');
+  const distanceUnit = formData.get('distance-unit');
+  form.reset();
+  return { temperatureUnit, distanceUnit };
 }
 
 export function updateMainInfo(data) {

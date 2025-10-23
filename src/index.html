@@ -23,6 +23,24 @@
       <button type="submit">Done</button>
     </form>
 
+    <form id="units-form" method="dialog" novalidate>
+      <label for="temperature-unit">
+        <span>Temperature unit:</span>
+        <select name="temperature-unit" id="temperature-unit">
+          <option value="fahrenheit" selected>Fahrenheit</option>
+          <option value="celsius">Celsius</option>
+        </select>
+      </label>
+      <label for="distance-unit">
+        <span>Distance unit:</span>
+        <select name="distance-unit" id="distance-unit">
+          <option value="imperial" selected>Imperial (mph, in)</option>
+          <option value="metric">Metric (kph, mm)</option>
+        </select>
+        <button type="submit">Done</button>
+      </label>
+    </form>
+
     <div class="container">
       <div class="card" id="hourly-forecast">
         <div class="title">Hourly forecast</div>
