@@ -1,3 +1,5 @@
+import { getWeekDay, getTwelveHourTime } from './date-hour-manager.js';
+
 export function getQueryFormData() {
   const form = document.querySelector('#query-form');
   const formData = new FormData(form);
@@ -34,7 +36,7 @@ export function updateDaysForecastCard(data) {
     const tempMaxDiv = document.createElement('div');
 
     dateDiv.classList.add('date');
-    dateDiv.innerText = day.date;
+    dateDiv.innerText = getWeekDay(day.date);
 
     iconDiv.classList.add('icon');
     iconDiv.innerText = '[icon]'; // temporary
@@ -62,9 +64,10 @@ export function updateHourlyForecastCard(data) {
     const iconDiv = document.createElement('div');
     const precipProbDiv = document.createElement('div');
     const tempDiv = document.createElement('div');
+    const time = getTwelveHourTime(hour.time);
 
     timeDiv.classList.add('time');
-    timeDiv.innerText = hour.time;
+    timeDiv.innerHTML = `<span>${time.hours}</span><span>${time.period}</span>`;
 
     iconDiv.classList.add('icon');
     iconDiv.innerText = '[icon]'; // temporary
@@ -96,8 +99,12 @@ export function updateHumidityCard(data) {
 
 export function updateSunriseSunsetCard(data) {
   const sunriseSunsetCard = document.querySelector('#sunrise-sunset');
-  sunriseSunsetCard.querySelector('.sunrise-time span').innerText = data.currentConditions.sunrise;
-  sunriseSunsetCard.querySelector('.sunset-time span').innerText = data.currentConditions.sunset;
+  const sunriseTime = getTwelveHourTime(data.currentConditions.sunrise);
+  const sunsetTime = getTwelveHourTime(data.currentConditions.sunset);
+  sunriseSunsetCard.querySelector('.sunrise-time span').innerHTML =
+    `<span>${sunriseTime.hours}:${sunriseTime.minutes}</span><span>${sunriseTime.period}</span>`;
+  sunriseSunsetCard.querySelector('.sunset-time span').innerHTML =
+    `<span>${sunsetTime.hours}:${sunsetTime.minutes}</span><span>${sunsetTime.period}</span>`;
 }
 
 export function updatePressureCard(data) {
