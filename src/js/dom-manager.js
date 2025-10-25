@@ -5,6 +5,30 @@ import {
   getKphFromMph,
 } from './unit-conversion.js';
 
+// Icons
+import snowIcon from '../assets/icons/snow-icon.png';
+import rainIcon from '../assets/icons/rain-icon.png';
+import fogIcon from '../assets/icons/fog-icon.png';
+import windIcon from '../assets/icons/wind-icon.png';
+import cloudyIcon from '../assets/icons/cloudy-icon.png';
+import partlyCloudyDayIcon from '../assets/icons/partly-cloudy-day-icon.png';
+import partlyCloudyNightIcon from '../assets/icons/partly-cloudy-night-icon.png';
+import clearDayIcon from '../assets/icons/clear-day-icon.png';
+import clearNightIcon from '../assets/icons/clear-night-icon.png';
+import umbrellaIcon from '../assets/icons/umbrella-icon.svg';
+
+const iconsMap = {
+  snow: snowIcon,
+  rain: rainIcon,
+  fog: fogIcon,
+  wind: windIcon,
+  cloudy: cloudyIcon,
+  'partly-cloudy-day': partlyCloudyDayIcon,
+  'partly-cloudy-night': partlyCloudyNightIcon,
+  'clear-day': clearDayIcon,
+  'clear-night': clearNightIcon,
+};
+
 let usingCelsius = false;
 let usingMetric = false;
 let temperatureUnit = '°F';
@@ -58,15 +82,16 @@ export function updateDaysForecastCard(data) {
   let index = 0;
   for (const day of data.days) {
     const dateDiv = document.createElement('div');
-    const iconDiv = document.createElement('div');
+    const weatherIconImg = document.createElement('img');
     const tempMinDiv = document.createElement('div');
     const tempMaxDiv = document.createElement('div');
 
     dateDiv.classList.add('date');
     dateDiv.innerText = index === 0 ? 'Today' : getWeekDay(day.date);
 
-    iconDiv.classList.add('icon');
-    iconDiv.innerText = '[icon]'; // temporary
+    weatherIconImg.classList.add('icon');
+    weatherIconImg.alt = day.icon;
+    weatherIconImg.src = iconsMap[day.icon];
 
     tempMinDiv.classList.add('temp-min');
     tempMinDiv.innerHTML = `Min: <span>${getConvertedTemperature(day.tempMin)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
@@ -75,7 +100,7 @@ export function updateDaysForecastCard(data) {
     tempMaxDiv.innerHTML = `Max: <span>${getConvertedTemperature(day.tempMax)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
 
     dayForecastContent.appendChild(dateDiv);
-    dayForecastContent.appendChild(iconDiv);
+    dayForecastContent.appendChild(weatherIconImg);
     dayForecastContent.appendChild(tempMinDiv);
     dayForecastContent.appendChild(tempMaxDiv);
     index++;
@@ -97,7 +122,8 @@ export function updateHourlyForecastCard(data) {
 
   for (const hour of data.currentDay.hours) {
     const timeDiv = document.createElement('div');
-    const iconDiv = document.createElement('div');
+    const weatherIconImg = document.createElement('img');
+    const umbrellaIconImg = document.createElement('img');
     const precipProbDiv = document.createElement('div');
     const tempDiv = document.createElement('div');
     const time = getTwelveHourTime(hour.time);
@@ -108,18 +134,28 @@ export function updateHourlyForecastCard(data) {
         ? 'Now'
         : `<span>${time.hours}</span><span>${time.period}</span>`;
 
-    iconDiv.classList.add('icon');
-    iconDiv.innerText = '[icon]'; // temporary
+    weatherIconImg.classList.add('icon');
+    weatherIconImg.alt = hour.icon;
+    weatherIconImg.src = iconsMap[hour.icon];
+
+    const wrapperDiv = document.createElement('div');
+    umbrellaIconImg.alt = 'Precipitation chance';
+    umbrellaIconImg.src = umbrellaIcon;
 
     precipProbDiv.classList.add('precip-prob');
     precipProbDiv.innerHTML = `<span>${hour.precipProb}</span>%`;
+
+    wrapperDiv.classList.add('wrapper');
+    wrapperDiv.appendChild(umbrellaIconImg);
+    wrapperDiv.appendChild(precipProbDiv);
 
     tempDiv.classList.add('temperature');
     tempDiv.innerHTML = `<span>${getConvertedTemperature(hour.temp)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
 
     hourlyForecastContent.querySelector('.hours').appendChild(timeDiv);
-    hourlyForecastContent.querySelector('.hours').appendChild(iconDiv);
-    hourlyForecastContent.querySelector('.hours').appendChild(precipProbDiv);
+    hourlyForecastContent.querySelector('.hours').appendChild(weatherIconImg);
+    // hourlyForecastContent.querySelector('.hours').appendChild(precipProbDiv);
+    hourlyForecastContent.querySelector('.hours').appendChild(wrapperDiv);
     hourlyForecastContent.querySelector('.hours').appendChild(tempDiv);
   }
 }

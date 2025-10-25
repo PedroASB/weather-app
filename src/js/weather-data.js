@@ -32,7 +32,7 @@ export default class WeatherData {
     for (const day of rawData.days) {
       days.push({
         date: day.datetime,
-        icon: '[icon]', // temporary
+        icon: day.icon,
         tempMin: Math.round(day.tempmin),
         tempMax: Math.round(day.tempmax),
       });
@@ -62,7 +62,7 @@ export default class WeatherData {
         time: hour.datetime,
         temp: Math.round(hour.temp),
         precipProb: Math.round(hour.precipprob),
-        icon: '[icon]', // temporary
+        icon: hour.icon,
       });
     }
 
