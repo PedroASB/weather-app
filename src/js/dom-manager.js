@@ -1,4 +1,27 @@
-import { getWeekDay, getTwelveHourTime } from './date-hour-manager.js';
+import { getFormattedDate, getWeekDay, getTwelveHourTime } from './date-hour-manager.js';
+import {
+  getCelsiusFromFahrenheit,
+  getMilimitersFromInches,
+  getKphFromMph,
+} from './unit-conversion.js';
+
+let usingCelsius = false;
+let usingMetric = false;
+let temperatureUnit = '°F';
+let precipitationUnit = 'in';
+let windSpeedUnit = 'mph';
+
+function getConvertedTemperature(temperature) {
+  return usingCelsius ? Math.round(getCelsiusFromFahrenheit(temperature)) : temperature;
+}
+
+function getConvertedPrecipitation(precipitation) {
+  return usingMetric ? Math.round(getMilimitersFromInches(precipitation)) : precipitation;
+}
+
+function getConvertedWindSpeed(windSpeed) {
+  return usingMetric ? getKphFromMph(windSpeed).toFixed(1) : windSpeed;
+}
 
 export function getQueryFormData() {
   const form = document.querySelector('#query-form');
@@ -8,27 +31,31 @@ export function getQueryFormData() {
   return query;
 }
 
-export function getUnitsFormData() {
-  const form = document.querySelector('#units-form');
-  const formData = new FormData(form);
-  const temperatureUnit = formData.get('temperature-unit');
-  const distanceUnit = formData.get('distance-unit');
-  form.reset();
-  return { temperatureUnit, distanceUnit };
+export function updateLocationInfo(data) {
+  const locationInfo = document.querySelector('#location-info');
+  locationInfo.querySelector('.current-location span').innerText = data.location;
 }
 
 export function updateMainInfo(data) {
   const mainInfo = document.querySelector('#main-info');
-  mainInfo.querySelector('.temperature span').innerText = data.currentConditions.temp;
-  mainInfo.querySelector('.location span').innerText = data.location;
-  mainInfo.querySelector('.feels-like span').innerText = data.currentConditions.feelsLike;
-  mainInfo.querySelector('.conditions span').innerText = data.currentConditions.conditions;
+  mainInfo.querySelector('.temperature span.value').innerText = getConvertedTemperature(
+    data.currentConditions.temp,
+  );
+  mainInfo.querySelector('.temperature span.temperature-unit').innerText = temperatureUnit;
+  mainInfo.querySelector('.date').innerText = getFormattedDate(data.days[0].date);
+
+  mainInfo.querySelector('.feels-like span.value').innerText = getConvertedTemperature(
+    data.currentConditions.feelsLike,
+  );
+  mainInfo.querySelector('.feels-like span.temperature-unit').innerText = temperatureUnit;
+  mainInfo.querySelector('.conditions').innerText = data.currentConditions.conditions;
 }
 
 export function updateDaysForecastCard(data) {
   const dayForecastContent = document.querySelector('#day-forecast .content');
   dayForecastContent.innerHTML = '';
 
+  let index = 0;
   for (const day of data.days) {
     const dateDiv = document.createElement('div');
     const iconDiv = document.createElement('div');
@@ -36,27 +63,36 @@ export function updateDaysForecastCard(data) {
     const tempMaxDiv = document.createElement('div');
 
     dateDiv.classList.add('date');
-    dateDiv.innerText = getWeekDay(day.date);
+    dateDiv.innerText = index === 0 ? 'Today' : getWeekDay(day.date);
 
     iconDiv.classList.add('icon');
     iconDiv.innerText = '[icon]'; // temporary
 
     tempMinDiv.classList.add('temp-min');
-    tempMinDiv.innerHTML = `Min: <span>${day.tempMin}</span>°F`;
+    tempMinDiv.innerHTML = `Min: <span>${getConvertedTemperature(day.tempMin)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
 
     tempMaxDiv.classList.add('temp-max');
-    tempMaxDiv.innerHTML = `Max: <span>${day.tempMax}</span>°F`;
+    tempMaxDiv.innerHTML = `Max: <span>${getConvertedTemperature(day.tempMax)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
 
     dayForecastContent.appendChild(dateDiv);
     dayForecastContent.appendChild(iconDiv);
     dayForecastContent.appendChild(tempMinDiv);
     dayForecastContent.appendChild(tempMaxDiv);
+    index++;
   }
 }
 
 export function updateHourlyForecastCard(data) {
   const hourlyForecastContent = document.querySelector('#hourly-forecast .content');
-  hourlyForecastContent.querySelector('.description').innerText = 'Today: ' + data.description;
+  hourlyForecastContent.querySelector('.description').innerHTML =
+    'Today: ' +
+    data.description +
+    ' Min: ' +
+    getConvertedTemperature(data.days[0].tempMin) +
+    `<span class="temperature-unit">${temperatureUnit}</span>` +
+    ' Max: ' +
+    getConvertedTemperature(data.days[0].tempMax) +
+    `<span class="temperature-unit">${temperatureUnit}</span>`;
   hourlyForecastContent.querySelector('.hours').innerHTML = '';
 
   for (const hour of data.currentDay.hours) {
@@ -67,7 +103,10 @@ export function updateHourlyForecastCard(data) {
     const time = getTwelveHourTime(hour.time);
 
     timeDiv.classList.add('time');
-    timeDiv.innerHTML = `<span>${time.hours}</span><span>${time.period}</span>`;
+    timeDiv.innerHTML =
+      hour.time === data.currentConditions.time
+        ? 'Now'
+        : `<span>${time.hours}</span><span>${time.period}</span>`;
 
     iconDiv.classList.add('icon');
     iconDiv.innerText = '[icon]'; // temporary
@@ -76,7 +115,7 @@ export function updateHourlyForecastCard(data) {
     precipProbDiv.innerHTML = `<span>${hour.precipProb}</span>%`;
 
     tempDiv.classList.add('temperature');
-    tempDiv.innerHTML = `<span>${hour.temp}</span>°F`;
+    tempDiv.innerHTML = `<span>${getConvertedTemperature(hour.temp)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
 
     hourlyForecastContent.querySelector('.hours').appendChild(timeDiv);
     hourlyForecastContent.querySelector('.hours').appendChild(iconDiv);
@@ -87,7 +126,11 @@ export function updateHourlyForecastCard(data) {
 
 export function updatePrecipitationCard(data) {
   const precipitationCard = document.querySelector('#precipitation');
-  precipitationCard.querySelector('.precip-level span').innerText = data.currentConditions.precip;
+  precipitationCard.querySelector('.precip-level span.value').innerText = getConvertedPrecipitation(
+    data.currentConditions.precip,
+  );
+  precipitationCard.querySelector('.precip-level span.precipitation-unit').innerText =
+    precipitationUnit;
   precipitationCard.querySelector('.precip-prob span').innerText =
     data.currentConditions.precipProb;
 }
@@ -114,7 +157,10 @@ export function updatePressureCard(data) {
 
 export function updateWindCard(data) {
   const windCard = document.querySelector('#wind');
-  windCard.querySelector('.wind-speed span').innerText = data.currentConditions.windSpeed;
+  windCard.querySelector('.wind-speed span.value').innerText = getConvertedWindSpeed(
+    data.currentConditions.windSpeed,
+  );
+  windCard.querySelector('.wind-speed span.wind-speed-unit').innerText = windSpeedUnit;
   windCard.querySelector('.wind-direction span').innerText = data.currentConditions.windDir;
 }
 
@@ -123,7 +169,9 @@ export function updateUvIndexCard(data) {
   uvIndexCard.querySelector('.uv-index span').innerText = data.currentConditions.uvIndex;
 }
 
-export function updateAllSections(data) {
+export function updateAllSections(weatherData) {
+  const data = weatherData.getData();
+  updateLocationInfo(data);
   updateMainInfo(data);
   updateDaysForecastCard(data);
   updateHourlyForecastCard(data);
@@ -133,4 +181,34 @@ export function updateAllSections(data) {
   updatePressureCard(data);
   updateWindCard(data);
   updateUvIndexCard(data);
+}
+
+export function switchToFahrenheit(weatherData) {
+  if (!usingCelsius) return;
+  usingCelsius = false;
+  temperatureUnit = '°F';
+  updateAllSections(weatherData);
+}
+
+export function switchToCelsius(weatherData) {
+  if (usingCelsius) return;
+  usingCelsius = true;
+  temperatureUnit = '°C';
+  updateAllSections(weatherData);
+}
+
+export function switchToImperial(weatherData) {
+  if (!usingMetric) return;
+  usingMetric = false;
+  precipitationUnit = 'in';
+  windSpeedUnit = 'mph';
+  updateAllSections(weatherData);
+}
+
+export function switchToMetric(weatherData) {
+  if (usingMetric) return;
+  usingMetric = true;
+  precipitationUnit = 'mm';
+  windSpeedUnit = 'km/h';
+  updateAllSections(weatherData);
 }

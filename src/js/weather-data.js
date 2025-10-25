@@ -11,6 +11,9 @@ export default class WeatherData {
   #data = {};
   #usingCelsius;
   #usingMetric;
+  #temperatureUnit = '°F';
+  #precipitationUnit = 'in';
+  #windSpeedUnit = 'mph';
 
   constructor(rawData) {
     this.#data = this.#processData(rawData);
@@ -81,6 +84,18 @@ export default class WeatherData {
     return JSON.parse(JSON.stringify(this.#data));
   }
 
+  getTemperatureUnit() {
+    return this.#temperatureUnit;
+  }
+
+  getPrecipitationUnit() {
+    return this.#precipitationUnit;
+  }
+
+  getWindSpeedUnit() {
+    return this.#windSpeedUnit;
+  }
+
   #updateTemperatureUnit(updateFunction) {
     this.#data.currentConditions.temp = Math.round(
       updateFunction(this.#data.currentConditions.temp),
@@ -95,8 +110,8 @@ export default class WeatherData {
     });
 
     this.#data.days.forEach((day) => {
+      day.tempMin = Math.round(updateFunction(day.tempMin));
       day.tempMax = Math.round(updateFunction(day.tempMax));
-      day.tempMin = Math.round(updateFunction(day.tempMax));
     });
   }
 
@@ -113,18 +128,22 @@ export default class WeatherData {
   useCelsius() {
     if (this.#usingCelsius) return;
     this.#usingCelsius = true;
+    this.#temperatureUnit = '°C';
     this.#updateTemperatureUnit(getCelsiusFromFahrenheit);
   }
 
   useFahrenheit() {
     if (!this.#usingCelsius) return;
     this.#usingCelsius = false;
+    this.#temperatureUnit = '°F';
     this.#updateTemperatureUnit(getFahrenheitFromCelsius);
   }
 
   useMetric() {
     if (this.#usingMetric) return;
     this.#usingMetric = true;
+    this.#precipitationUnit = 'mm';
+    this.#windSpeedUnit = 'km/h';
     this.#updatePrecipitationUnit(getMilimitersFromInches);
     this.#updateWindSpeedUnit(getKphFromMph);
   }
@@ -132,6 +151,8 @@ export default class WeatherData {
   useImperial() {
     if (!this.#usingMetric) return;
     this.#usingMetric = false;
+    this.#precipitationUnit = 'in';
+    this.#windSpeedUnit = 'mph';
     this.#updatePrecipitationUnit(getInchesFromMilimiters);
     this.#updateWindSpeedUnit(getMphFromKph);
   }

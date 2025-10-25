@@ -8,85 +8,102 @@
   <body>
     <h1 id="main-title">Weather App</h1>
 
-    <div id="main-info" class="card">
-      <div class="location"><span>New York</span></div>
-      <div class="temperature"><span>25</span>°F</div>
-      <div class="feels-like">Feels like <span></span>°F</div>
-      <div class="conditions"><span>Partly Cloudy</span></div>
-    </div>
-
-    <form id="query-form" method="dialog" novalidate>
-      <label for="query">
-        <span>Location: </span>
-        <input type="text" name="query" id="query" placeholder="Enter a location" />
-      </label>
-      <button type="submit">Done</button>
-    </form>
-
-    <form id="units-form" method="dialog" novalidate>
-      <label for="temperature-unit">
-        <span>Temperature unit:</span>
-        <select name="temperature-unit" id="temperature-unit">
-          <option value="fahrenheit" selected>Fahrenheit</option>
-          <option value="celsius">Celsius</option>
-        </select>
-      </label>
-      <label for="distance-unit">
-        <span>Distance unit:</span>
-        <select name="distance-unit" id="distance-unit">
-          <option value="imperial" selected>Imperial (mph, in)</option>
-          <option value="metric">Metric (kph, mm)</option>
-        </select>
-        <button type="submit">Done</button>
-      </label>
-    </form>
-
     <div class="container">
-      <div class="card" id="hourly-forecast">
-        <div class="title">Hourly forecast</div>
-        <div class="content">
-          <div class="description"></div>
-          <div class="hours"></div>
+      <div id="header">
+        <div id="location-info">
+          <div class="current-location">
+            <img src="./assets/icons/location-icon.svg" alt="Current location" class="icon" />
+            <span overflow="ellipsis" text-wrap="off"></span>
+          </div>
+          <form id="query-form" method="dialog" novalidate>
+            <label for="query">
+              <input
+                type="text"
+                name="query"
+                id="query"
+                placeholder="Enter a location"
+                autocomplete="off"
+                spellcheck="false"
+                maxlength="100"
+              />
+            </label>
+            <button type="submit">
+              <img src="./assets/icons/search-icon.svg" alt="Search" class="icon" />
+            </button>
+          </form>
+        </div>
+        <div id="main-info">
+          <div class="date" text-wrap="off"></div>
+          <div class="temperature"><span class="value"></span><span class="temperature-unit"></span></div>
+          <div class="feels-like">Feels like <span class="value"></span><span class="temperature-unit"></span></div>
+          <div class="conditions" overflow="ellipsis" text-wrap="off"></div>
+        </div>
+        <div id="settings">
+          <div id="set-temperature-unit" class="setting">
+            <div class="label">Temperature unit</div>
+            <div class="options">
+              <button type="button" id="fahrenheit-btn" title="Fahrenheit degrees" selected>°F</button>
+              <button type="button" id="celsius-btn" title="Celsius degrees">°C</button>
+            </div>
+          </div>
+
+          <div id="set-measurement-system" class="setting">
+            <div class="label">Measurement system</div>
+            <div class="options">
+              <span class="wind-speed-unit"><button type="button" id="imperial-btn" title="Imperial system (mph, inches etc.)" selected>Imperial</button></span>
+              <button type="button" id="metric-btn" title="Metric system (km/h, milimiters etc.)">Metric</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card" id="day-forecast">
-        <div class="title">10-day forecast</div>
-        <div class="content"></div>
-      </div>
-      <div class="card" id="precipitation">
-        <div class="title">Precipitation</div>
-        <div class="content">
-          <div class="precip-level">Precipitation: <span>?</span> in</div>
-          <div class="precip-prob">Precipitation chance: <span>?</span>%</div>
+      <div class="cards-section">
+        <div class="card" id="hourly-forecast">
+          <div class="title">Hourly forecast</div>
+          <div class="content">
+            <div class="description"></div>
+            <div class="hours"></div>
+          </div>
         </div>
-      </div>
-      <div class="card" id="sunrise-sunset">
-        <div class="title">Sunrise & sunset</div>
-        <div class="content">
-          <div class="sunrise-time">Sunrise time: <span>?</span></div>
-          <div class="sunset-time">Sunset time: <span>?</span></div>
+        <div class="card" id="day-forecast">
+          <div class="title">10-day forecast</div>
+          <div class="content"></div>
         </div>
-      </div>
-      <div class="card" id="humidity">
-        <div class="title">Humidity</div>
-        <div class="air-humidity">Air humidity: <span>?</span>%</div>
-      </div>
-      <div class="card" id="pressure">
-        <div class="title">Pressure</div>
-        <div class="air-pressure">Air pressure: <span>?</span> mb</div>
-      </div>
-      <div class="card" id="wind">
-        <div class="title">Wind</div>
-        <div class="content">
-          <div class="wind-speed">Wind speed: <span>?</span> mph</div>
-          <div class="wind-direction">Wind direction: <span>?</span>°</div>
+        <div class="card" id="precipitation">
+          <div class="title">Precipitation</div>
+          <div class="content">
+            <div class="precip-level">Precipitation: <span class="value">?</span> <span class="precipitation-unit"></span></div>
+            <div class="precip-prob">Precipitation chance: <span>?</span>%</div>
+          </div>
         </div>
-      </div>
-      <div class="card" id="uv-index">
-        <div class="title">UV Index</div>
-        <div class="uv-index">UV Index: <span>?</span></div>
+        <div class="card" id="sunrise-sunset">
+          <div class="title">Sunrise & sunset</div>
+          <div class="content">
+            <div class="sunrise-time">Sunrise time: <span>?</span></div>
+            <div class="sunset-time">Sunset time: <span>?</span></div>
+          </div>
+        </div>
+        <div class="card" id="humidity">
+          <div class="title">Humidity</div>
+          <div class="air-humidity">Air humidity: <span>?</span>%</div>
+        </div>
+        <div class="card" id="pressure">
+          <div class="title">Pressure</div>
+          <div class="air-pressure">Air pressure: <span>?</span> mb</div>
+        </div>
+        <div class="card" id="wind">
+          <div class="title">Wind</div>
+          <div class="content">
+            <div class="wind-speed">Wind speed: <span class="value">?</span> <span class="wind-speed-unit"></span></div>
+            <div class="wind-direction">Wind direction: <span>?</span>°</div>
+          </div>
+        </div>
+        <div class="card" id="uv-index">
+          <div class="title">UV Index</div>
+          <div class="uv-index">UV Index: <span>?</span></div>
+        </div>
       </div>
     </div>
+
     <div class="footer">
       <a href="https://github.com/PedroASB">&copy; 2025 Pedro Augusto</a>
     </div>

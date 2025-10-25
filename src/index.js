@@ -4,11 +4,16 @@ import * as weatherApi from './js/weather-api.js';
 import * as domManager from './js/dom-manager.js';
 import sampleData from './js/sample-data.js';
 
-domManager.updateAllSections(sampleData);
+// domManager.updateAllSections(sampleData);
 
 const submitQueryFormButton = document.querySelector('#query-form button[type="submit"]');
-const submitUnitsFormButton = document.querySelector('#units-form button[type="submit"]');
+const initialRequest = weatherApi.createRequest('New York USA');
 let currentWeatherData = null;
+
+weatherApi.getWeatherData(initialRequest).then((weatherData) => {
+  currentWeatherData = weatherData;
+  domManager.updateAllSections(currentWeatherData);
+});
 
 submitQueryFormButton.addEventListener('click', () => {
   const query = domManager.getQueryFormData();
@@ -17,33 +22,42 @@ submitQueryFormButton.addEventListener('click', () => {
     .getWeatherData(request)
     .then((weatherData) => {
       currentWeatherData = weatherData;
-      domManager.updateAllSections(currentWeatherData.getData());
+      domManager.updateAllSections(currentWeatherData);
     })
     .catch(() => {
       alert('It was not possible to find this location.');
     });
 });
 
-submitUnitsFormButton.addEventListener('click', () => {
-  const { temperatureUnit, distanceUnit } = domManager.getUnitsFormData();
+function initializeEventListeners() {
+  const fahrenheitButton = document.querySelector('#fahrenheit-btn');
+  const celsiusButton = document.querySelector('#celsius-btn');
+  const metricButton = document.querySelector('#metric-btn');
+  const imperialButton = document.querySelector('#imperial-btn');
 
-  switch (temperatureUnit) {
-    case 'fahrenheit':
-      currentWeatherData.useFahrenheit();
-      break;
-    case 'celsius':
-      currentWeatherData.useCelsius();
-      break;
-  }
+  fahrenheitButton.addEventListener('click', () => {
+    fahrenheitButton.setAttribute('selected', true);
+    celsiusButton.removeAttribute('selected');
+    domManager.switchToFahrenheit(currentWeatherData);
+  });
 
-  switch (distanceUnit) {
-    case 'metric':
-      currentWeatherData.useMetric();
-      break;
-    case 'imperial':
-      currentWeatherData.useImperial();
-      break;
-  }
+  celsiusButton.addEventListener('click', () => {
+    celsiusButton.setAttribute('selected', true);
+    fahrenheitButton.removeAttribute('selected');
+    domManager.switchToCelsius(currentWeatherData);
+  });
 
-  domManager.updateAllSections(currentWeatherData.getData());
-});
+  imperialButton.addEventListener('click', () => {
+    imperialButton.setAttribute('selected', true);
+    metricButton.removeAttribute('selected');
+    domManager.switchToImperial(currentWeatherData);
+  });
+
+  metricButton.addEventListener('click', () => {
+    metricButton.setAttribute('selected', true);
+    imperialButton.removeAttribute('selected');
+    domManager.switchToMetric(currentWeatherData);
+  });
+}
+
+initializeEventListeners();

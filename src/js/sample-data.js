@@ -1,4 +1,5 @@
 export default {
+  // location: 'Manaus, AM, Brasil',
   location: 'Manaus, AM, Brasil',
   description: 'Warming up with a chance of rain tomorrow, Thursday & Friday.',
   timeZoneOffset: -4.0,
