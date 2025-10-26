@@ -34,15 +34,21 @@
         </div>
         <div id="main-info">
           <div class="date" text-wrap="off"></div>
-          <div class="temperature"><span class="value"></span><span class="temperature-unit"></span></div>
-          <div class="feels-like">Feels like <span class="value"></span><span class="temperature-unit"></span></div>
+          <div class="temperature">
+            <span class="value"></span><span class="temperature-unit"></span>
+          </div>
+          <div class="feels-like">
+            Feels like <span class="value"></span><span class="temperature-unit"></span>
+          </div>
           <div class="conditions" overflow="ellipsis" text-wrap="off"></div>
         </div>
         <div id="settings">
           <div id="set-temperature-unit" class="setting">
             <div class="label">Temperature unit</div>
             <div class="options">
-              <button type="button" id="fahrenheit-btn" title="Fahrenheit degrees" selected>°F</button>
+              <button type="button" id="fahrenheit-btn" title="Fahrenheit degrees" selected>
+                °F
+              </button>
               <button type="button" id="celsius-btn" title="Celsius degrees">°C</button>
             </div>
           </div>
@@ -50,8 +56,19 @@
           <div id="set-measurement-system" class="setting">
             <div class="label">Measurement system</div>
             <div class="options">
-              <span class="wind-speed-unit"><button type="button" id="imperial-btn" title="Imperial system (mph, inches etc.)" selected>Imperial</button></span>
-              <button type="button" id="metric-btn" title="Metric system (km/h, milimiters etc.)">Metric</button>
+              <span class="wind-speed-unit"
+                ><button
+                  type="button"
+                  id="imperial-btn"
+                  title="Imperial system (mph, inches etc.)"
+                  selected
+                >
+                  Imperial
+                </button></span
+              >
+              <button type="button" id="metric-btn" title="Metric system (km/h, milimiters etc.)">
+                Metric
+              </button>
             </div>
           </div>
         </div>
@@ -71,7 +88,9 @@
         <div class="card" id="precipitation">
           <div class="title">Precipitation</div>
           <div class="content">
-            <div class="precip-level">Precipitation: <span class="value">?</span> <span class="precipitation-unit"></span></div>
+            <div class="precip-level">
+              Precipitation: <span class="value">?</span> <span class="precipitation-unit"></span>
+            </div>
             <div class="precip-prob">Precipitation chance: <span>?</span>%</div>
           </div>
         </div>
@@ -93,7 +112,9 @@
         <div class="card" id="wind">
           <div class="title">Wind</div>
           <div class="content">
-            <div class="wind-speed">Wind speed: <span class="value">?</span> <span class="wind-speed-unit"></span></div>
+            <div class="wind-speed">
+              Wind speed: <span class="value">?</span> <span class="wind-speed-unit"></span>
+            </div>
             <div class="wind-direction">Wind direction: <span>?</span>°</div>
           </div>
         </div>

@@ -2,18 +2,13 @@ import './css/reset.css';
 import './css/style.css';
 import * as weatherApi from './js/weather-api.js';
 import * as domManager from './js/dom-manager.js';
-import sampleData from './js/sample-data.js';
-
-// domManager.updateAllSections(sampleData);
+import sampleRawData from './js/sample-raw-data.json';
+import WeatherData from './js/weather-data.js';
 
 const submitQueryFormButton = document.querySelector('#query-form button[type="submit"]');
-const initialRequest = weatherApi.createRequest('New York USA');
-let currentWeatherData = null;
-
-weatherApi.getWeatherData(initialRequest).then((weatherData) => {
-  currentWeatherData = weatherData;
-  domManager.updateAllSections(currentWeatherData);
-});
+let currentWeatherData = new WeatherData(sampleRawData);
+domManager.updateAllSections(currentWeatherData);
+domManager.updateBackground(currentWeatherData);
 
 submitQueryFormButton.addEventListener('click', () => {
   const query = domManager.getQueryFormData();

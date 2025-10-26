@@ -17,7 +17,8 @@ body {
   /* background-image: linear-gradient(rgba(0, 0, 0, 0.20) 0 0), url('../assets/imgs/partly-cloudy-day.jpg'); */
   /* background: linear-gradient(130deg, rgb(100, 146, 231) 0%, rgb(230, 197, 50) 180%); */
   background-image:
-    linear-gradient(rgba(124, 166, 192, 0.35) 0 0), url('../assets/imgs/partly-cloudy-day-background.jpg');
+    linear-gradient(rgba(124, 166, 192, 0.35) 0 0),
+    url('../assets/imgs/partly-cloudy-day-background.jpg');
   background-size: cover;
   font-family: var(--system-ui);
   display: flex;
