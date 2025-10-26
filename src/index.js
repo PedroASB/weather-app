@@ -23,6 +23,7 @@ submitQueryFormButton.addEventListener('click', () => {
     .then((weatherData) => {
       currentWeatherData = weatherData;
       domManager.updateAllSections(currentWeatherData);
+      domManager.updateBackground(currentWeatherData);
     })
     .catch(() => {
       alert('It was not possible to find this location.');

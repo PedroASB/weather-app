@@ -16,6 +16,16 @@ import partlyCloudyNightIcon from '../assets/icons/partly-cloudy-night-icon.png'
 import clearDayIcon from '../assets/icons/clear-day-icon.png';
 import clearNightIcon from '../assets/icons/clear-night-icon.png';
 import umbrellaIcon from '../assets/icons/umbrella-icon.svg';
+// Background images
+import clearNightBackground from '../assets/imgs/clear-night-background.jpg';
+import cloudyBackground from '../assets/imgs/cloudy-background.jpg';
+import partlyCloudyDayBackground from '../assets/imgs/partly-cloudy-day-background.jpg';
+import windBackground from '../assets/imgs/wind-background.jpg';
+import rainBackground from '../assets/imgs/rain-background.jpg';
+import snowBackground from '../assets/imgs/snow-background.jpg';
+import fogBackground from '../assets/imgs/fog-background.jpg';
+import partlyCloudyNightBackground from '../assets/imgs/partly-cloudy-night-background.jpg';
+import clearDayBackground from '../assets/imgs/clear-day-background.jpg';
 
 const iconsMap = {
   snow: snowIcon,
@@ -27,6 +37,18 @@ const iconsMap = {
   'partly-cloudy-night': partlyCloudyNightIcon,
   'clear-day': clearDayIcon,
   'clear-night': clearNightIcon,
+};
+
+const backgroundsMap = {
+  snow: `linear-gradient(rgba(136, 148, 167, 0.75) 0 0), url("${snowBackground}")`,
+  rain: `linear-gradient(rgba(120, 140, 173, 0.25) 0 0), url("${rainBackground}")`,
+  fog: `linear-gradient(rgba(108, 120, 138, 0.25) 0 0), url("${fogBackground}")`,
+  wind: `linear-gradient(rgba(83, 101, 126, 0.5) 0 0), url("${windBackground}")`,
+  cloudy: `linear-gradient(rgba(85, 99, 117, 0.5) 0 0), url("${cloudyBackground}")`,
+  'partly-cloudy-day': `linear-gradient(rgba(146, 180, 201, 0.5) 0 0), url("${partlyCloudyDayBackground}")`,
+  'partly-cloudy-night': `linear-gradient(rgba(78, 91, 124, 0.3) 0 0), url("${partlyCloudyNightBackground}")`,
+  'clear-night': `linear-gradient(rgba(78, 91, 124, 0.25) 0 0), url("${clearNightBackground}")`,
+  'clear-day': `linear-gradient(rgba(146, 180, 201, 0.2) 0 0), url("${clearDayBackground}")`,
 };
 
 let usingCelsius = false;
@@ -203,6 +225,12 @@ export function updateWindCard(data) {
 export function updateUvIndexCard(data) {
   const uvIndexCard = document.querySelector('#uv-index');
   uvIndexCard.querySelector('.uv-index span').innerText = data.currentConditions.uvIndex;
+}
+
+export function updateBackground(weatherData) {
+  const data = weatherData.getData();
+  const body = document.querySelector('body');
+  body.style.backgroundImage = backgroundsMap[data.currentConditions.icon];
 }
 
 export function updateAllSections(weatherData) {
