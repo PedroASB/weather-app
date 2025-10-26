@@ -87,6 +87,8 @@ export function updateMainInfo(data) {
   mainInfo.querySelector('.temperature span.value').innerText = getConvertedTemperature(
     data.currentConditions.temp,
   );
+  mainInfo.querySelector(".icon").alt = data.currentConditions.icon;
+  mainInfo.querySelector(".icon").src = iconsMap[data.currentConditions.icon];
   mainInfo.querySelector('.temperature span.temperature-unit').innerText = temperatureUnit;
   mainInfo.querySelector('.date').innerText = getFormattedDate(data.days[0].date);
 

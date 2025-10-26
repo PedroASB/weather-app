@@ -81,7 +81,7 @@ button {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1300px;
 }
 
 #header {
@@ -143,8 +143,18 @@ button {
   justify-self: center;
   filter: var(--drop-shadow-smooth);
 
-  .temperature {
-    font-size: 5rem;
+  .wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .icon {
+      width: 5rem;
+    }
+
+    .temperature {
+      font-size: 5rem;
+    }
   }
 
   .feels-like {
