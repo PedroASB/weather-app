@@ -3,7 +3,8 @@
     system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-color-main: #fff;
-  --font-color-secondary: #f0fdff;
+  --font-color-secondary: #d8e9f3;
+  --font-color-main-dimmer: #ececec;
   --font-color-card-title: #c6e4f5;
   --placeholder-color: #f3f3f3;
   --drop-shadow-smooth: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
@@ -200,7 +201,7 @@ button {
         }
 
         &:hover {
-          outline-color: rgb(70, 70, 70);
+          outline-color: rgb(154, 177, 196);
         }
       }
     }
@@ -211,14 +212,16 @@ button {
   flex: 1;
   display: grid;
   margin-top: 32px;
-  grid-template-columns: 2fr 1fr 1fr 2fr;
-  grid-template-rows: 1.5fr 1fr 1fr;
+  /* grid-template-columns: 2fr 1fr 1fr 2fr;
+  grid-template-rows: 1.5fr 1fr 1fr; */
+  grid-template-columns: 1fr 180px 180px 1fr;
+  grid-template-rows: 1fr 180px 180px;
   gap: 24px;
 
   .card {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    /* gap: 32px; */
     padding: 16px;
 
     .title {
@@ -234,15 +237,35 @@ button {
 #hourly-forecast {
   grid-column: 1 / -2;
   grid-row-start: 1;
-  max-width: 800px;
   padding-bottom: 24px;
+  /* max-width: 800px; */
+
+  .title {
+    margin-bottom: 32px;
+  }
 
   .content {
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    padding: 8px 16px;
 
-    .description {
-      height: 50px;
+    .today-info {
+      .subtitle {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .min-max {
+        margin-bottom: 16px;
+      }
+
+      .value,
+      .temperature-unit {
+        font-weight: 600;
+      }
     }
 
     .hours {
@@ -278,16 +301,32 @@ button {
   grid-row: 1 / -1;
   grid-column-start: -2;
 
+  .title {
+    margin-bottom: 32px;
+  }
+
   .content {
     display: grid;
     grid-template-columns: 2fr 1fr 2fr 2fr;
-    grid-auto-rows: 3rem;
+    grid-auto-rows: minmax(3rem, auto);
     gap: 8px;
     justify-items: center;
     align-items: center;
 
+    .description {
+      grid-row-start: 1;
+      grid-column: 1 / -1;
+      font-size: 0.95rem;
+      padding: 0 32px;
+    }
+
     .icon {
       width: 35px;
+    }
+
+    .value,
+    .temperature-unit {
+      font-weight: 600;
     }
   }
 }
@@ -295,11 +334,210 @@ button {
 #precipitation {
   grid-column-start: 1;
   grid-row-start: 2;
+
+  .content {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1.25fr 1.25fr;
+    gap: 8px;
+    align-items: center;
+    justify-items: center;
+    padding: 8px;
+    font-size: 1.5rem;
+
+    .icon {
+      width: 70px;
+    }
+
+    .precip-level,
+    .precip-prob {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .value {
+      font-size: 2.25rem;
+      font-weight: 600;
+    }
+
+    .feedback {
+      color: var(--font-color-secondary);
+      font-size: 1rem;
+    }
+  }
+}
+
+#wind {
+  grid-column-start: 1;
+  grid-row-start: 3;
+
+  .content {
+    display: flex;
+    align-items: center;
+    padding: 16px 32px;
+    height: 100%;
+    gap: 64px;
+    font-size: 1rem;
+
+    .wrapper {
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .value {
+      font-size: 1.25rem;
+    }
+
+    .feedback {
+      color: var(--font-color-secondary);
+    }
+  }
+
+  .compass {
+    border: 2px dashed #fff;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .north {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+      font-size: 13px;
+      line-height: 0;
+      background-color: #fff;
+      color: #7c7c7c;
+      font-weight: 600;
+      padding: 10px;
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid white;
+      left: 38%;
+      top: -8px;
+      width: 2ch;
+      height: 2ch;
+    }
+
+    #arrow-icon {
+      transform: rotate(0deg);
+      width: 40px;
+    }
+  }
+}
+
+#humidity,
+#pressure,
+#sunrise-sunset,
+#uv-index {
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
 }
 
 #sunrise-sunset {
-  grid-column-start: 1;
+  grid-column-start: 2;
+  grid-row-start: 2;
+
+  .content {
+    gap: 8px;
+    padding: 16px;
+
+    .label {
+      font-size: 0.9rem;
+    }
+
+    .value {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+  }
+}
+
+#humidity {
+  grid-column-start: 3;
+  grid-row-start: 2;
+
+  .content {
+    align-items: center;
+
+    .air-humidity {
+      font-size: 1.5rem;
+      .value {
+        font-size: 2.5rem;
+        font-weight: 600;
+      }
+    }
+
+    .feedback {
+      color: var(--font-color-secondary);
+    }
+  }
+}
+
+#pressure {
+  grid-column-start: 2;
   grid-row-start: 3;
+
+  .content {
+    align-items: center;
+
+    .air-pressure {
+      font-size: 1.2rem;
+      .value {
+        font-size: 2rem;
+        font-weight: 600;
+      }
+    }
+
+    .feedback {
+      color: var(--font-color-secondary);
+    }
+  }
+}
+
+#uv-index {
+  grid-column-start: 3;
+  grid-row-start: 3;
+
+  .content {
+    align-items: center;
+
+    .value {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .feedback {
+      color: var(--font-color-secondary);
+    }
+
+    .meter {
+      border-radius: 8px;
+      width: calc(calc(11 * 10px) + 4px);
+      background-color: #fff;
+      height: 10px;
+      padding: 2px;
+      margin-top: 8px;
+
+      .bar {
+        border-radius: inherit;
+        height: 100%;
+        width: 0%;
+        background-color: #fff;
+      }
+    }
+  }
 }
 
 .footer {
