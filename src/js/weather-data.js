@@ -1,20 +1,23 @@
 export default class WeatherData {
-  #data = {};
+  location = null;
+  description = null;
+  timeZoneOffset = null;
+  days = [];
+  currentConditions = {};
+  currentDay = { hours: [] };
+  nextDay = { hours: [] };
 
   constructor(rawData) {
-    this.#data = this.#processData(rawData);
-  }
-
-  #processData(rawData) {
     if (!rawData) {
-      console.error('Invalid raw data at proccess data method.');
-      return;
+      throw Error('Invalid raw data at proccess data method.');
     }
 
-    const days = [];
+    this.location = rawData.resolvedAddress;
+    this.description = rawData.description;
+    this.timeZoneOffset = rawData.tzoffset;
 
     for (const day of rawData.days) {
-      days.push({
+      this.days.push({
         date: day.datetime,
         icon: day.icon,
         tempMin: Math.round(day.tempmin),
@@ -22,7 +25,7 @@ export default class WeatherData {
       });
     }
 
-    const currentConditions = {
+    this.currentConditions = {
       icon: rawData.currentConditions.icon,
       time: rawData.currentConditions.datetime,
       conditions: rawData.currentConditions.conditions,
@@ -41,63 +44,41 @@ export default class WeatherData {
       sunset: rawData.currentConditions.sunset,
     };
 
-    const currentDay = { hours: [] };
-
     for (const hour of rawData.days[0].hours) {
-      currentDay.hours.push({
+      this.currentDay.hours.push({
         time: hour.datetime,
         temp: Math.round(hour.temp),
         precipProb: Math.round(hour.precipprob),
         icon: hour.icon,
       });
     }
-
-    const nextDay = { hours: [] };
 
     for (const hour of rawData.days[1].hours) {
-      nextDay.hours.push({
+      this.nextDay.hours.push({
         time: hour.datetime,
         temp: Math.round(hour.temp),
         precipProb: Math.round(hour.precipprob),
         icon: hour.icon,
       });
     }
-
-    const processedData = {
-      location: rawData.resolvedAddress,
-      description: rawData.description,
-      timeZoneOffset: rawData.tzoffset,
-      days,
-      currentConditions,
-      currentDay,
-      nextDay,
-    };
-
-    return processedData;
-  }
-
-  getData() {
-    // Deep copying data
-    return JSON.parse(JSON.stringify(this.#data));
   }
 
   getNext24HoursData() {
-    const currentHours = this.#data.currentConditions.time.split(':')[0];
-    const currentDay = this.#data.currentDay;
-    const nextDay = this.#data.nextDay;
+    const getHoursFromTime = (time) => time.split(':')[0];
+    const currentHours = getHoursFromTime(this.currentConditions.time);
     const next24HoursData = [];
 
     let currentDayIndex = 0;
-    for (const hour of currentDay.hours) {
-      if (hour.time.split(':')[0] >= currentHours) {
-        next24HoursData.push(currentDay.hours[currentDayIndex]);
+    for (const hour of this.currentDay.hours) {
+      if (getHoursFromTime(hour.time) >= currentHours) {
+        next24HoursData.push(this.currentDay.hours[currentDayIndex]);
       }
       currentDayIndex++;
     }
 
     let nextDayIndex = 0;
     while (next24HoursData.length < 24) {
-      next24HoursData.push(nextDay.hours[nextDayIndex]);
+      next24HoursData.push(this.nextDay.hours[nextDayIndex]);
       nextDayIndex++;
     }
 
