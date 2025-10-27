@@ -60,11 +60,15 @@ const backgroundsMap = {
   'clear-day': `linear-gradient(rgba(146, 180, 201, 0.2) 0 0), url("${clearDayBackground}")`,
 };
 
+/* Variables */
+
 let usingCelsius = false;
 let usingMetric = false;
-let temperatureUnit = '°F';
-let precipitationUnit = 'in';
-let windSpeedUnit = 'mph';
+let currentTemperatureUnit = '°F';
+let currentPrecipitationUnit = 'in';
+let currentWindSpeedUnit = 'mph';
+
+/* Auxiliar functions */
 
 function getConvertedTemperature(temperature) {
   return usingCelsius ? Math.round(getCelsiusFromFahrenheit(temperature)) : temperature;
@@ -78,6 +82,8 @@ function getConvertedWindSpeed(windSpeed) {
   return usingMetric ? getKphFromMph(windSpeed).toFixed(1) : windSpeed;
 }
 
+/* Forms */
+
 export function getQueryFormData() {
   const form = document.querySelector('#query-form');
   const formData = new FormData(form);
@@ -85,6 +91,8 @@ export function getQueryFormData() {
   form.reset();
   return query;
 }
+
+/* Update sections */
 
 export function updateLocationInfo(data) {
   const locationInfo = document.querySelector('#location-info');
@@ -99,13 +107,13 @@ export function updateMainInfo(data) {
   );
   mainInfo.querySelector('.icon').alt = data.currentConditions.icon;
   mainInfo.querySelector('.icon').src = iconsMap[data.currentConditions.icon];
-  mainInfo.querySelector('.temperature span.temperature-unit').innerText = temperatureUnit;
+  mainInfo.querySelector('.temperature span.temperature-unit').innerText = currentTemperatureUnit;
   mainInfo.querySelector('.date').innerText = getFormattedDate(data.days[0].date);
 
   mainInfo.querySelector('.feels-like span.value').innerText = getConvertedTemperature(
     data.currentConditions.feelsLike,
   );
-  mainInfo.querySelector('.feels-like span.temperature-unit').innerText = temperatureUnit;
+  mainInfo.querySelector('.feels-like span.temperature-unit').innerText = currentTemperatureUnit;
   mainInfo.querySelector('.conditions').innerText = data.currentConditions.conditions;
   mainInfo.querySelector('.conditions').title = data.currentConditions.conditions;
 }
@@ -136,10 +144,10 @@ export function updateDaysForecastCard(data) {
     weatherIconImg.src = iconsMap[day.icon];
 
     tempMinDiv.classList.add('temp-min');
-    tempMinDiv.innerHTML = `Min: <span class="value">${getConvertedTemperature(day.tempMin)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
+    tempMinDiv.innerHTML = `Min: <span class="value">${getConvertedTemperature(day.tempMin)}</span><span class="temperature-unit">${currentTemperatureUnit}</span>`;
 
     tempMaxDiv.classList.add('temp-max');
-    tempMaxDiv.innerHTML = `Max: <span class="value">${getConvertedTemperature(day.tempMax)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
+    tempMaxDiv.innerHTML = `Max: <span class="value">${getConvertedTemperature(day.tempMax)}</span><span class="temperature-unit">${currentTemperatureUnit}</span>`;
 
     dayForecastContent.appendChild(dateDiv);
     dayForecastContent.appendChild(weatherIconImg);
@@ -154,10 +162,10 @@ export function updateHourlyForecastCard(data, next24HoursData) {
   hourlyForecastContent.querySelector('.min-max').innerHTML =
     ' Min: ' +
     `<span class="value">${getConvertedTemperature(data.days[0].tempMin)}</span>` +
-    `<span class="temperature-unit">${temperatureUnit}</span>` +
+    `<span class="temperature-unit">${currentTemperatureUnit}</span>` +
     ' — Max: ' +
     `<span class="value">${getConvertedTemperature(data.days[0].tempMax)}</span>` +
-    `<span class="temperature-unit">${temperatureUnit}</span>`;
+    `<span class="temperature-unit">${currentTemperatureUnit}</span>`;
 
   hourlyForecastContent.querySelector('.hours').innerHTML = '';
 
@@ -190,7 +198,7 @@ export function updateHourlyForecastCard(data, next24HoursData) {
     wrapperDiv.appendChild(precipProbDiv);
 
     tempDiv.classList.add('temperature');
-    tempDiv.innerHTML = `<span>${getConvertedTemperature(hour.temp)}</span><span class="temperature-unit">${temperatureUnit}</span>`;
+    tempDiv.innerHTML = `<span>${getConvertedTemperature(hour.temp)}</span><span class="temperature-unit">${currentTemperatureUnit}</span>`;
 
     hourlyForecastContent.querySelector('.hours').appendChild(timeDiv);
     hourlyForecastContent.querySelector('.hours').appendChild(weatherIconImg);
@@ -207,7 +215,7 @@ export function updatePrecipitationCard(data) {
     data.currentConditions.precip,
   );
   precipitationCard.querySelector('.precip-level .precipitation-unit').innerText =
-    precipitationUnit;
+    currentPrecipitationUnit;
   precipitationCard.querySelector('.precip-level .feedback').innerText = getPrecipLevelFeedback(
     data.currentConditions.precip,
   );
@@ -249,7 +257,7 @@ export function updateWindCard(data) {
   windCard.querySelector('.wind-speed span.value').innerText = getConvertedWindSpeed(
     data.currentConditions.windSpeed,
   );
-  windCard.querySelector('.wind-speed span.wind-speed-unit').innerText = windSpeedUnit;
+  windCard.querySelector('.wind-speed span.wind-speed-unit').innerText = currentWindSpeedUnit;
   windCard.querySelector('.wind-speed + .feedback').innerText = getWindSpeedFeedback(
     data.currentConditions.windSpeed,
   );
@@ -291,35 +299,35 @@ export function updateAllSections(weatherData) {
   updateUvIndexCard(data);
 }
 
-export function switchToFahrenheit(weatherData) {
+/* Change current measurement units */
+
+export function switchToFahrenheit() {
   if (!usingCelsius) return;
   usingCelsius = false;
-  temperatureUnit = '°F';
-  updateAllSections(weatherData);
+  currentTemperatureUnit = '°F';
 }
 
-export function switchToCelsius(weatherData) {
+export function switchToCelsius() {
   if (usingCelsius) return;
   usingCelsius = true;
-  temperatureUnit = '°C';
-  updateAllSections(weatherData);
+  currentTemperatureUnit = '°C';
 }
 
-export function switchToImperial(weatherData) {
+export function switchToImperial() {
   if (!usingMetric) return;
   usingMetric = false;
-  precipitationUnit = 'in';
-  windSpeedUnit = 'mph';
-  updateAllSections(weatherData);
+  currentPrecipitationUnit = 'in';
+  currentWindSpeedUnit = 'mph';
 }
 
-export function switchToMetric(weatherData) {
+export function switchToMetric() {
   if (usingMetric) return;
   usingMetric = true;
-  precipitationUnit = 'mm';
-  windSpeedUnit = 'km/h';
-  updateAllSections(weatherData);
+  currentPrecipitationUnit = 'mm';
+  currentWindSpeedUnit = 'km/h';
 }
+
+/* Display/hide feedback fields */
 
 export function displayLoadingComponent() {
   const loadingComponent = document.querySelector('#location-info .loading');
