@@ -15,7 +15,7 @@ export function getWeekDay(dateString) {
   return formatDateFns(date, 'E');
 }
 
-export function getTwelveHourTime(timeString) {
+export function convertTo12HourClock(timeString) {
   const [hours, minutes, seconds] = timeString.split(':');
   const period = hours < 12 ? 'AM' : 'PM';
   return { hours: hours % 12 || 12, minutes, seconds, period };

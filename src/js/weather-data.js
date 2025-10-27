@@ -52,6 +52,17 @@ export default class WeatherData {
       });
     }
 
+    const nextDay = { hours: [] };
+
+    for (const hour of rawData.days[1].hours) {
+      nextDay.hours.push({
+        time: hour.datetime,
+        temp: Math.round(hour.temp),
+        precipProb: Math.round(hour.precipprob),
+        icon: hour.icon,
+      });
+    }
+
     const processedData = {
       location: rawData.resolvedAddress,
       description: rawData.description,
@@ -59,6 +70,7 @@ export default class WeatherData {
       days,
       currentConditions,
       currentDay,
+      nextDay,
     };
 
     return processedData;
@@ -67,5 +79,28 @@ export default class WeatherData {
   getData() {
     // Deep copying data
     return JSON.parse(JSON.stringify(this.#data));
+  }
+
+  getNext24HoursData() {
+    const currentHours = this.#data.currentConditions.time.split(':')[0];
+    const currentDay = this.#data.currentDay;
+    const nextDay = this.#data.nextDay;
+    const next24HoursData = [];
+
+    let currentDayIndex = 0;
+    for (const hour of currentDay.hours) {
+      if (hour.time.split(':')[0] >= currentHours) {
+        next24HoursData.push(currentDay.hours[currentDayIndex]);
+      }
+      currentDayIndex++;
+    }
+
+    let nextDayIndex = 0;
+    while (next24HoursData.length < 24) {
+      next24HoursData.push(nextDay.hours[nextDayIndex]);
+      nextDayIndex++;
+    }
+
+    return next24HoursData;
   }
 }

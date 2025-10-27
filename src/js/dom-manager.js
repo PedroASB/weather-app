@@ -1,4 +1,4 @@
-import { getFormattedDate, getWeekDay, getTwelveHourTime } from './date-hour-manager.js';
+import { getFormattedDate, getWeekDay, convertTo12HourClock } from './date-hour-manager.js';
 import {
   getCelsiusFromFahrenheit,
   getMilimitersFromInches,
@@ -149,7 +149,7 @@ export function updateDaysForecastCard(data) {
   }
 }
 
-export function updateHourlyForecastCard(data) {
+export function updateHourlyForecastCard(data, next24HoursData) {
   const hourlyForecastContent = document.querySelector('#hourly-forecast .content');
   hourlyForecastContent.querySelector('.min-max').innerHTML =
     ' Min: ' +
@@ -161,19 +161,18 @@ export function updateHourlyForecastCard(data) {
 
   hourlyForecastContent.querySelector('.hours').innerHTML = '';
 
-  for (const hour of data.currentDay.hours) {
+  let index = 0;
+  for (const hour of next24HoursData) {
     const timeDiv = document.createElement('div');
     const weatherIconImg = document.createElement('img');
     const umbrellaIconImg = document.createElement('img');
     const precipProbDiv = document.createElement('div');
     const tempDiv = document.createElement('div');
-    const time = getTwelveHourTime(hour.time);
+    const time = convertTo12HourClock(hour.time);
 
     timeDiv.classList.add('time');
     timeDiv.innerHTML =
-      hour.time === data.currentConditions.time
-        ? 'Now'
-        : `<span>${time.hours}</span><span>${time.period}</span>`;
+      index === 0 ? 'Now' : `<span>${time.hours}</span><span>${time.period}</span>`;
 
     weatherIconImg.classList.add('icon');
     weatherIconImg.alt = hour.icon;
@@ -198,6 +197,7 @@ export function updateHourlyForecastCard(data) {
     // hourlyForecastContent.querySelector('.hours').appendChild(precipProbDiv);
     hourlyForecastContent.querySelector('.hours').appendChild(wrapperDiv);
     hourlyForecastContent.querySelector('.hours').appendChild(tempDiv);
+    index++;
   }
 }
 
@@ -228,8 +228,8 @@ export function updateHumidityCard(data) {
 
 export function updateSunriseSunsetCard(data) {
   const sunriseSunsetCard = document.querySelector('#sunrise-sunset');
-  const sunriseTime = getTwelveHourTime(data.currentConditions.sunrise);
-  const sunsetTime = getTwelveHourTime(data.currentConditions.sunset);
+  const sunriseTime = convertTo12HourClock(data.currentConditions.sunrise);
+  const sunsetTime = convertTo12HourClock(data.currentConditions.sunset);
   sunriseSunsetCard.querySelector('.sunrise-time .value').innerHTML =
     `<span>${sunriseTime.hours}:${sunriseTime.minutes}</span> <span>${sunriseTime.period}</span>`;
   sunriseSunsetCard.querySelector('.sunset-time .value').innerHTML =
@@ -282,7 +282,7 @@ export function updateAllSections(weatherData) {
   updateLocationInfo(data);
   updateMainInfo(data);
   updateDaysForecastCard(data);
-  updateHourlyForecastCard(data);
+  updateHourlyForecastCard(data, weatherData.getNext24HoursData());
   updatePrecipitationCard(data);
   updateHumidityCard(data);
   updateSunriseSunsetCard(data);
