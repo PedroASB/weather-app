@@ -21,11 +21,12 @@
   --drop-shadow-smooth: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
   --drop-shadow-smoother: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.25));
   --button-selected-color: #ccdfeb;
+  --card-bg-color: rgba(93, 101, 105, 0.35);
 }
 
 body {
   min-height: 100vh;
-  background-color: #333333;
+  background-color: #333;
   background-image: url('../assets/imgs/partly-cloudy-day-background.jpg');
   background-size: cover;
   font-family: var(--system-ui);
@@ -37,7 +38,7 @@ body {
 }
 
 .card {
-  background-color: rgba(93, 101, 105, 0.35);
+  background-color: var(--card-bg-color);
   backdrop-filter: blur(8px);
   border-radius: 16px;
 
@@ -88,7 +89,6 @@ button {
   filter: var(--drop-shadow-smoother);
 
   display: flex;
-  /* align-items: center; */
   justify-content: center;
   gap: 12px;
 
@@ -96,7 +96,7 @@ button {
     width: 4.25rem;
   }
 
-  div {
+  .text {
     font-family: 'Coiny', var(--system-ui);
     font-weight: 100;
   }
@@ -225,14 +225,14 @@ button {
         border-radius: 4px;
         border: none;
         width: 10ch;
-        color: #333333;
+        color: #333;
 
         &[selected] {
           background-color: var(--button-selected-color);
         }
 
         &:hover {
-          outline-color: rgb(154, 177, 196);
+          outline-color: #9ab1c4;
         }
       }
     }
@@ -243,8 +243,6 @@ button {
   flex: 1;
   display: grid;
   margin-top: 32px;
-  /* grid-template-columns: 2fr 1fr 1fr 2fr;
-  grid-template-rows: 1.5fr 1fr 1fr; */
   grid-template-columns: 1fr 180px 180px 1fr;
   grid-template-rows: 1fr 180px 180px;
   gap: 24px;
@@ -252,15 +250,14 @@ button {
   .card {
     display: flex;
     flex-direction: column;
-    /* gap: 32px; */
     padding: 16px;
 
     .title {
       text-transform: uppercase;
       font-weight: 600;
       color: var(--font-color-card-title);
-      border-bottom: 1px solid #c6d9e252;
-      padding-bottom: 2px;
+      border-bottom: 1px solid #c6d9e27e;
+      padding-bottom: 4px;
     }
   }
 }
@@ -269,7 +266,6 @@ button {
   grid-column: 1 / -2;
   grid-row-start: 1;
   padding-bottom: 24px;
-  /* max-width: 800px; */
 
   .title {
     margin-bottom: 32px;
@@ -574,6 +570,7 @@ button {
 .footer {
   padding: 2px 0;
   margin: 20px 0 4px 0;
+  filter: var(--drop-shadow);
 
   a {
     text-decoration: none;
