@@ -24,6 +24,7 @@
 
 body {
   min-height: 100vh;
+  background-color: #333333;
   background-image: url('../assets/imgs/partly-cloudy-day-background.jpg');
   background-size: cover;
   font-family: var(--system-ui);
@@ -149,6 +150,12 @@ button {
       outline: none;
       border: none;
       background-color: transparent;
+    }
+
+    .loading {
+      display: none;
+      margin-left: 10px;
+      font-weight: 500;
     }
   }
 }

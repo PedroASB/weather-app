@@ -320,3 +320,15 @@ export function switchToMetric(weatherData) {
   windSpeedUnit = 'km/h';
   updateAllSections(weatherData);
 }
+
+export function displayLoadingComponent() {
+  const loadingComponent = document.querySelector('#location-info .loading');
+  loadingComponent.style.display = 'block';
+  console.log(loadingComponent);
+}
+
+export function hideLoadingComponent() {
+  const loadingComponent = document.querySelector('#location-info .loading');
+  loadingComponent.style.display = 'none';
+  console.log(loadingComponent);
+}

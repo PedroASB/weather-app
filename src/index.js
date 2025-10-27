@@ -10,9 +10,11 @@ let currentWeatherData = new WeatherData(sampleRawData);
 domManager.updateAllSections(currentWeatherData);
 domManager.updateBackground(currentWeatherData);
 
-submitQueryFormButton.addEventListener('click', () => {
+function handleSubmitQueryForm() {
   const query = domManager.getQueryFormData();
   const request = weatherApi.createRequest(query);
+
+  domManager.displayLoadingComponent();
   weatherApi
     .getWeatherData(request)
     .then((weatherData) => {
@@ -22,8 +24,13 @@ submitQueryFormButton.addEventListener('click', () => {
     })
     .catch(() => {
       alert('It was not possible to find this location.');
+    })
+    .finally(() => {
+      domManager.hideLoadingComponent();
     });
-});
+}
+
+submitQueryFormButton.addEventListener('click', handleSubmitQueryForm);
 
 function initializeEventListeners() {
   const fahrenheitButton = document.querySelector('#fahrenheit-btn');
