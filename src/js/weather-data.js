@@ -29,7 +29,9 @@ export default class WeatherData {
       temp: Math.round(rawData.currentConditions.temp),
       feelsLike: Math.round(rawData.currentConditions.feelslike),
       humidity: Math.round(rawData.currentConditions.humidity),
-      precip: rawData.currentConditions.precip,
+      // Note: some stations only record precipitation when there are positive values;
+      // they don't explicitly zero-fill when there is no rain
+      precip: rawData.currentConditions.precip ?? 0,
       precipProb: Math.round(rawData.currentConditions.precipprob),
       uvIndex: rawData.currentConditions.uvindex,
       pressure: rawData.currentConditions.pressure,
