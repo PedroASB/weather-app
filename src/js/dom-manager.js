@@ -323,14 +323,12 @@ export function switchToMetric(weatherData) {
 
 export function displayLoadingComponent() {
   const loadingComponent = document.querySelector('#location-info .loading');
-  loadingComponent.style.display = 'block';
-  console.log(loadingComponent);
+  loadingComponent.innerHTML = 'Loading&#8230;';
 }
 
 export function hideLoadingComponent() {
   const loadingComponent = document.querySelector('#location-info .loading');
-  loadingComponent.style.display = 'none';
-  console.log(loadingComponent);
+  loadingComponent.innerHTML = '';
 }
 
 export function showErrorMessage(errorMessage) {
