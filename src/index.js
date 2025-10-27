@@ -12,9 +12,13 @@ domManager.updateBackground(currentWeatherData);
 
 function handleSubmitQueryForm() {
   const query = domManager.getQueryFormData();
+  if (query === '') {
+    domManager.showErrorMessage('Enter a location to search for its weather data.');
+    return;
+  }
   const request = weatherApi.createRequest(query);
-
   domManager.displayLoadingComponent();
+
   weatherApi
     .getWeatherData(request)
     .then((weatherData) => {
