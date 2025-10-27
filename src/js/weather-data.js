@@ -56,7 +56,6 @@ export default class WeatherData {
       location: rawData.resolvedAddress,
       description: rawData.description,
       timeZoneOffset: rawData.tzoffset,
-      alerts: rawData.alerts,
       days,
       currentConditions,
       currentDay,
