@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'Coiny';
+  src:
+    url('../assets//fonts/Coiny-Regular.woff2') format('woff2'),
+    url('../assets/fonts/Coiny-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --system-ui:
     system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
@@ -14,12 +24,7 @@
 
 body {
   min-height: 100vh;
-  /* background-image: url('../assets/imgs/partly-cloudy-day-background.jpg'); */
-  /* background-image: linear-gradient(rgba(0, 0, 0, 0.20) 0 0), url('../assets/imgs/partly-cloudy-day.jpg'); */
-  /* background: linear-gradient(130deg, rgb(100, 146, 231) 0%, rgb(230, 197, 50) 180%); */
-  background-image:
-    linear-gradient(rgba(124, 166, 192, 0.35) 0 0),
-    url('../assets/imgs/partly-cloudy-day-background.jpg');
+  background-image: url('../assets/imgs/partly-cloudy-day-background.jpg');
   background-size: cover;
   font-family: var(--system-ui);
   display: flex;
@@ -78,7 +83,21 @@ button {
   width: 100%;
   text-align: center;
   margin: 10px 0 20px 0;
-  filter: var(--drop-shadow-smooth);
+  filter: var(--drop-shadow-smoother);
+
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 12px;
+
+  .logo {
+    width: 4.25rem;
+  }
+
+  div {
+    font-family: 'Coiny', var(--system-ui);
+    font-weight: 100;
+  }
 }
 
 .container {
