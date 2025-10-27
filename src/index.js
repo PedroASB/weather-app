@@ -21,9 +21,11 @@ function handleSubmitQueryForm() {
       currentWeatherData = weatherData;
       domManager.updateAllSections(currentWeatherData);
       domManager.updateBackground(currentWeatherData);
+      domManager.hideErrorMessage();
     })
     .catch(() => {
-      alert('It was not possible to find this location.');
+      const errorMessage = 'It was not possible to find this location.';
+      domManager.showErrorMessage(errorMessage);
     })
     .finally(() => {
       domManager.hideLoadingComponent();

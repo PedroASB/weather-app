@@ -332,3 +332,13 @@ export function hideLoadingComponent() {
   loadingComponent.style.display = 'none';
   console.log(loadingComponent);
 }
+
+export function showErrorMessage(errorMessage) {
+  const errorField = document.querySelector('#location-info .error');
+  errorField.innerText = errorMessage;
+}
+
+export function hideErrorMessage() {
+  const errorField = document.querySelector('#location-info .error');
+  errorField.innerText = '';
+}

@@ -17,6 +17,7 @@
   --font-color-main-dimmer: #ececec;
   --font-color-card-title: #c6e4f5;
   --placeholder-color: #f3f3f3;
+  --drop-shadow: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.75));
   --drop-shadow-smooth: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
   --drop-shadow-smoother: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.25));
   --button-selected-color: #ccdfeb;
@@ -116,7 +117,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  filter: var(--drop-shadow-smooth);
+  filter: var(--drop-shadow);
   justify-self: start;
 
   .current-location {
@@ -157,6 +158,11 @@ button {
       margin-left: 10px;
       font-weight: 500;
     }
+  }
+
+  .error {
+    color: #fff;
+    max-width: 380px;
   }
 }
 
