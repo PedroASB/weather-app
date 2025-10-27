@@ -8,7 +8,7 @@ import {
   getHumidityFeedback,
   getPrecipLevelFeedback,
   getPrecipProbFeedback,
-  getPressureFeeback,
+  getPressureFeedback,
   getUvIndexFeedback,
   getWindDirectionFeedback,
   getWindSpeedFeedback,
@@ -239,7 +239,7 @@ export function updateSunriseSunsetCard(data) {
 export function updatePressureCard(data) {
   const pressureCard = document.querySelector('#pressure');
   pressureCard.querySelector('.air-pressure span').innerText = data.currentConditions.pressure;
-  pressureCard.querySelector('.feedback').innerText = getPressureFeeback(
+  pressureCard.querySelector('.feedback').innerText = getPressureFeedback(
     data.currentConditions.pressure,
   );
 }

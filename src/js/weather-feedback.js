@@ -1,4 +1,4 @@
-export function getPressureFeeback(pressure) {
+export function getPressureFeedback(pressure) {
   if (pressure <= 995) return 'Very low';
   if (pressure <= 1005) return 'Low';
   if (pressure <= 1020) return 'Normal';
