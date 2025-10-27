@@ -50,15 +50,6 @@ export function getUvIndexFeedback(uvIndex) {
   };
 }
 
-export function getWindSpeedFeedback(windSpeed) {
-  if (windSpeed <= 3) return 'Calm';
-  if (windSpeed <= 12) return 'Light breeze';
-  if (windSpeed <= 24) return 'Moderate wind';
-  if (windSpeed <= 38) return 'Strong wind';
-  if (windSpeed <= 55) return 'Very strong wind';
-  return 'Severe wind storm';
-}
-
 export function getPrecipProbFeedback(precipProb) {
   if (precipProb <= 10) return 'Very low chance';
   if (precipProb <= 30) return 'Low chance';
@@ -74,6 +65,15 @@ export function getPrecipLevelFeedback(precipLevel) {
   if (precipLevel <= 2.0) return 'Heavy rain';
   if (precipLevel <= 4.0) return 'Very heavy rain';
   return 'Extreme rain';
+}
+
+export function getWindSpeedFeedback(windSpeed) {
+  if (windSpeed <= 3) return 'Calm';
+  if (windSpeed <= 12) return 'Light breeze';
+  if (windSpeed <= 24) return 'Moderate wind';
+  if (windSpeed <= 38) return 'Strong wind';
+  if (windSpeed <= 55) return 'Very strong wind';
+  return 'Severe wind storm';
 }
 
 export function getWindDirectionFeedback(degrees) {
