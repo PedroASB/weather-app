@@ -1,5 +1,4 @@
 import WeatherData from './weather-data.js';
-export { createRequest, getWeatherData };
 
 const API_KEY = 'ZNUHVB5T8SUGMLTYE5U3XSPFM';
 const UNIT_GROUP = 'us';
@@ -19,11 +18,13 @@ async function fetchData(request) {
   if (!response.ok) {
     throw Error(`Not successful response. Status: ${response.status}`);
   }
-  const data = await response.json();
-  return data;
+  const rawData = await response.json();
+  return rawData;
 }
 
 async function getWeatherData(request) {
   const rawData = await fetchData(request);
   return new WeatherData(rawData);
 }
+
+export { createRequest, getWeatherData };
