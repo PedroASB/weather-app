@@ -106,18 +106,18 @@ export function updateLocationInfo(weatherData) {
 
 export function updateMainInfo(weatherData) {
   const mainInfo = document.querySelector('#main-info');
-  mainInfo.querySelector('.temperature span.value').innerText = getConvertedTemperature(
+  mainInfo.querySelector('.temperature .value').innerText = getConvertedTemperature(
     weatherData.currentConditions.temp,
   );
   mainInfo.querySelector('.icon').alt = weatherData.currentConditions.icon;
   mainInfo.querySelector('.icon').src = iconsMap[weatherData.currentConditions.icon];
-  mainInfo.querySelector('.temperature span.temperature-unit').innerText = currentTemperatureUnit;
+  mainInfo.querySelector('.temperature .temperature-unit').innerText = currentTemperatureUnit;
   mainInfo.querySelector('.date').innerText = getFormattedDate(weatherData.days[0].date);
 
-  mainInfo.querySelector('.feels-like span.value').innerText = getConvertedTemperature(
+  mainInfo.querySelector('.feels-like .value').innerText = getConvertedTemperature(
     weatherData.currentConditions.feelsLike,
   );
-  mainInfo.querySelector('.feels-like span.temperature-unit').innerText = currentTemperatureUnit;
+  mainInfo.querySelector('.feels-like .temperature-unit').innerText = currentTemperatureUnit;
   mainInfo.querySelector('.conditions').innerText = weatherData.currentConditions.conditions;
   mainInfo.querySelector('.conditions').title = weatherData.currentConditions.conditions;
 }
@@ -260,10 +260,10 @@ export function updatePressureCard(weatherData) {
 
 export function updateWindCard(weatherData) {
   const windCard = document.querySelector('#wind');
-  windCard.querySelector('.wind-speed span.value').innerText = getConvertedWindSpeed(
+  windCard.querySelector('.wind-speed .value').innerText = getConvertedWindSpeed(
     weatherData.currentConditions.windSpeed,
   );
-  windCard.querySelector('.wind-speed span.wind-speed-unit').innerText = currentWindSpeedUnit;
+  windCard.querySelector('.wind-speed .wind-speed-unit').innerText = currentWindSpeedUnit;
   windCard.querySelector('.wind-speed + .feedback').innerText = getWindSpeedFeedback(
     weatherData.currentConditions.windSpeed,
   );
