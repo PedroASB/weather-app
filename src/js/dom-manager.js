@@ -64,47 +64,45 @@ export function getSubmitQueryFormButton() {
 
 /* Update sections */
 
-export function updateLocationInfo(weatherData) {
+export function updateLocationInfo({ location }) {
   const locationInfo = document.querySelector('#location-info');
-  locationInfo.querySelector('.current-location span').innerText = weatherData.location;
-  locationInfo.querySelector('.current-location span').title = weatherData.location;
+
+  locationInfo.querySelector('.current-location span').innerText = location;
+  locationInfo.querySelector('.current-location span').title = location;
 }
 
-export function updateMainInfo(weatherData) {
+export function updateMainInfo({ temp, icon, day, feelsLike, conditions }) {
   const mainInfo = document.querySelector('#main-info');
-  mainInfo.querySelector('.temperature .value').innerText = getConvertedTemperature(
-    weatherData.currentConditions.temp,
-  );
 
-  mainInfo.querySelector('.icon').alt = weatherData.currentConditions.icon;
-  import(`../assets/icons/${weatherData.currentConditions.icon}-icon.png`).then((icon) => {
+  mainInfo.querySelector('.temperature .value').innerText = getConvertedTemperature(temp);
+
+  mainInfo.querySelector('.icon').alt = icon;
+  import(`../assets/icons/${icon}-icon.png`).then((icon) => {
     mainInfo.querySelector('.icon').src = icon.default;
   });
 
   mainInfo.querySelector('.temperature .temperature-unit').innerText = currentTemperatureUnit;
-  mainInfo.querySelector('.date').innerText = getFormattedDate(weatherData.days[0].date);
+  mainInfo.querySelector('.date').innerText = getFormattedDate(day.date);
 
-  mainInfo.querySelector('.feels-like .value').innerText = getConvertedTemperature(
-    weatherData.currentConditions.feelsLike,
-  );
+  mainInfo.querySelector('.feels-like .value').innerText = getConvertedTemperature(feelsLike);
   mainInfo.querySelector('.feels-like .temperature-unit').innerText = currentTemperatureUnit;
-  mainInfo.querySelector('.conditions').innerText = weatherData.currentConditions.conditions;
-  mainInfo.querySelector('.conditions').title = weatherData.currentConditions.conditions;
+  mainInfo.querySelector('.conditions').innerText = conditions;
+  mainInfo.querySelector('.conditions').title = conditions;
 }
 
-export function updateDaysForecastCard(weatherData) {
+export function updateDaysForecastCard({ description, days }) {
   const dayForecastContent = document.querySelector('#day-forecast .content');
-  const description = document.createElement('div');
+  const descriptionDiv = document.createElement('div');
 
   dayForecastContent.innerHTML = '';
 
-  description.classList.add('description');
-  description.innerHTML = weatherData.description;
-  description.title = weatherData.description;
-  dayForecastContent.appendChild(description);
+  descriptionDiv.classList.add('description');
+  descriptionDiv.innerHTML = description;
+  descriptionDiv.title = description;
+  dayForecastContent.appendChild(descriptionDiv);
 
   let index = 0;
-  for (const day of weatherData.days) {
+  for (const day of days) {
     const dateDiv = document.createElement('div');
     const weatherIconImg = document.createElement('img');
     const tempMinDiv = document.createElement('div');
@@ -133,20 +131,20 @@ export function updateDaysForecastCard(weatherData) {
   }
 }
 
-export function updateHourlyForecastCard(weatherData) {
+export function updateHourlyForecastCard({ day, next24HoursData }) {
   const hourlyForecastContent = document.querySelector('#hourly-forecast .content');
+
   hourlyForecastContent.querySelector('.min-max').innerHTML =
     ' Min: ' +
-    `<span class="value">${getConvertedTemperature(weatherData.days[0].tempMin)}</span>` +
+    `<span class="value">${getConvertedTemperature(day.tempMin)}</span>` +
     `<span class="temperature-unit">${currentTemperatureUnit}</span>` +
     ' — Max: ' +
-    `<span class="value">${getConvertedTemperature(weatherData.days[0].tempMax)}</span>` +
+    `<span class="value">${getConvertedTemperature(day.tempMax)}</span>` +
     `<span class="temperature-unit">${currentTemperatureUnit}</span>`;
 
   hourlyForecastContent.querySelector('.hours').innerHTML = '';
 
   let index = 0;
-  const next24HoursData = weatherData.getNext24HoursData();
   for (const hour of next24HoursData) {
     const timeDiv = document.createElement('div');
     const weatherIconImg = document.createElement('img');
@@ -187,101 +185,75 @@ export function updateHourlyForecastCard(weatherData) {
   }
 }
 
-export function updatePrecipitationCard(weatherData) {
+export function updatePrecipitationCard({ precip, precipProb }) {
   const precipitationCard = document.querySelector('#precipitation');
-  precipitationCard.querySelector('.precip-level .value').innerText = getConvertedPrecipitation(
-    weatherData.currentConditions.precip,
-  );
+
+  precipitationCard.querySelector('.precip-level .value').innerText =
+    getConvertedPrecipitation(precip);
   precipitationCard.querySelector('.precip-level .precipitation-unit').innerText =
     currentPrecipitationUnit;
-  precipitationCard.querySelector('.precip-level .feedback').innerText = getPrecipLevelFeedback(
-    weatherData.currentConditions.precip,
-  );
-  precipitationCard.querySelector('.precip-prob .value').innerText =
-    weatherData.currentConditions.precipProb;
-  precipitationCard.querySelector('.precip-prob .feedback').innerText = getPrecipProbFeedback(
-    weatherData.currentConditions.precipProb,
-  );
+  precipitationCard.querySelector('.precip-level .feedback').innerText =
+    getPrecipLevelFeedback(precip);
+  precipitationCard.querySelector('.precip-prob .value').innerText = precipProb;
+  precipitationCard.querySelector('.precip-prob .feedback').innerText =
+    getPrecipProbFeedback(precipProb);
 }
 
-export function updateHumidityCard(weatherData) {
+export function updateHumidityCard({ humidity }) {
   const humidityCard = document.querySelector('#humidity');
-  humidityCard.querySelector('.air-humidity span').innerText =
-    weatherData.currentConditions.humidity;
-  humidityCard.querySelector('.feedback').innerText = getHumidityFeedback(
-    weatherData.currentConditions.humidity,
-  );
+
+  humidityCard.querySelector('.air-humidity span').innerText = humidity;
+  humidityCard.querySelector('.feedback').innerText = getHumidityFeedback(humidity);
 }
 
-export function updateSunriseSunsetCard(weatherData) {
+export function updateSunriseSunsetCard({ sunrise, sunset }) {
   const sunriseSunsetCard = document.querySelector('#sunrise-sunset');
-  const sunriseTime = convertTo12HourClock(weatherData.currentConditions.sunrise);
-  const sunsetTime = convertTo12HourClock(weatherData.currentConditions.sunset);
+  const sunriseTime = convertTo12HourClock(sunrise);
+  const sunsetTime = convertTo12HourClock(sunset);
+
   sunriseSunsetCard.querySelector('.sunrise-time .value').innerHTML =
     `<span>${sunriseTime.hours}:${sunriseTime.minutes}</span> <span>${sunriseTime.period}</span>`;
   sunriseSunsetCard.querySelector('.sunset-time .value').innerHTML =
     `<span>${sunsetTime.hours}:${sunsetTime.minutes}</span> <span>${sunsetTime.period}</span>`;
 }
 
-export function updatePressureCard(weatherData) {
+export function updatePressureCard({ pressure }) {
   const pressureCard = document.querySelector('#pressure');
-  pressureCard.querySelector('.air-pressure span').innerText =
-    weatherData.currentConditions.pressure;
-  pressureCard.querySelector('.feedback').innerText = getPressureFeedback(
-    weatherData.currentConditions.pressure,
-  );
+
+  pressureCard.querySelector('.air-pressure span').innerText = pressure;
+  pressureCard.querySelector('.feedback').innerText = getPressureFeedback(pressure);
 }
 
-export function updateWindCard(weatherData) {
+export function updateWindCard({ windSpeed, windDir }) {
   const windCard = document.querySelector('#wind');
-  windCard.querySelector('.wind-speed .value').innerText = getConvertedWindSpeed(
-    weatherData.currentConditions.windSpeed,
-  );
+
+  windCard.querySelector('.wind-speed .value').innerText = getConvertedWindSpeed(windSpeed);
   windCard.querySelector('.wind-speed .wind-speed-unit').innerText = currentWindSpeedUnit;
-  windCard.querySelector('.wind-speed + .feedback').innerText = getWindSpeedFeedback(
-    weatherData.currentConditions.windSpeed,
-  );
-  windCard.querySelector('.wind-direction span').innerText =
-    weatherData.currentConditions.windDir + '°';
+  windCard.querySelector('.wind-speed + .feedback').innerText = getWindSpeedFeedback(windSpeed);
+  windCard.querySelector('.wind-direction span').innerText = windDir + '°';
   windCard.querySelector('.wind-direction .feedback').innerText =
-    `(${getWindDirectionFeedback(weatherData.currentConditions.windDir)})`;
-  windCard.querySelector('#arrow-icon').style.transform =
-    `rotate(${weatherData.currentConditions.windDir}deg)`;
+    `(${getWindDirectionFeedback(windDir)})`;
+  windCard.querySelector('#arrow-icon').style.transform = `rotate(${windDir}deg)`;
 }
 
-export function updateUvIndexCard(weatherData) {
+export function updateUvIndexCard({ uvIndex }) {
   const uvIndexCard = document.querySelector('#uv-index');
-  const uvIndexFeedback = getUvIndexFeedback(weatherData.currentConditions.uvIndex);
+  const uvIndexFeedback = getUvIndexFeedback(uvIndex);
 
-  uvIndexCard.querySelector('.value').innerText = weatherData.currentConditions.uvIndex;
+  uvIndexCard.querySelector('.value').innerText = uvIndex;
   uvIndexCard.querySelector('.feedback').innerText = uvIndexFeedback.text;
   uvIndexCard.querySelector('.meter .bar').style.width =
     `calc(${uvIndexFeedback.barWidthProportion} * 10px)`;
   uvIndexCard.querySelector('.meter .bar').style.backgroundColor = uvIndexFeedback.color;
 }
 
-export function updateBackground(weatherData) {
+export function updateBackground({ icon }) {
   const body = document.querySelector('body');
-  const gradient = backgroundGradients[weatherData.currentConditions.icon];
+  const gradient = backgroundGradients[icon];
 
-  import(`../assets/imgs/${weatherData.currentConditions.icon}-background.jpg`).then(
-    (backgroundImage) => {
-      body.style.backgroundImage = `${gradient}, url(${backgroundImage.default})`;
-    },
-  );
-}
-
-export function updateAllSections(weatherData) {
-  updateLocationInfo(weatherData);
-  updateMainInfo(weatherData);
-  updateDaysForecastCard(weatherData);
-  updateHourlyForecastCard(weatherData);
-  updatePrecipitationCard(weatherData);
-  updateHumidityCard(weatherData);
-  updateSunriseSunsetCard(weatherData);
-  updatePressureCard(weatherData);
-  updateWindCard(weatherData);
-  updateUvIndexCard(weatherData);
+  import(`../assets/imgs/${icon}-background.jpg`).then((backgroundImage) => {
+    body.style.backgroundImage = `${gradient}, url(${backgroundImage.default})`;
+  });
 }
 
 /* Change current measurement units */
@@ -314,7 +286,7 @@ export function switchToMetric() {
 
 /* Initialize event listeners */
 
-export function initializeSettingsEventListeners(getCurrentWeatherData) {
+export function initializeSettingsEventListeners(updateSectionsFunction) {
   const fahrenheitButton = document.querySelector('#fahrenheit-btn');
   const celsiusButton = document.querySelector('#celsius-btn');
   const metricButton = document.querySelector('#metric-btn');
@@ -324,28 +296,28 @@ export function initializeSettingsEventListeners(getCurrentWeatherData) {
     fahrenheitButton.setAttribute('selected', true);
     celsiusButton.removeAttribute('selected');
     switchToFahrenheit();
-    updateAllSections(getCurrentWeatherData());
+    updateSectionsFunction();
   });
 
   celsiusButton.addEventListener('click', () => {
     celsiusButton.setAttribute('selected', true);
     fahrenheitButton.removeAttribute('selected');
     switchToCelsius();
-    updateAllSections(getCurrentWeatherData());
+    updateSectionsFunction();
   });
 
   imperialButton.addEventListener('click', () => {
     imperialButton.setAttribute('selected', true);
     metricButton.removeAttribute('selected');
     switchToImperial();
-    updateAllSections(getCurrentWeatherData());
+    updateSectionsFunction();
   });
 
   metricButton.addEventListener('click', () => {
     metricButton.setAttribute('selected', true);
     imperialButton.removeAttribute('selected');
     switchToMetric();
-    updateAllSections(getCurrentWeatherData());
+    updateSectionsFunction();
   });
 }
 

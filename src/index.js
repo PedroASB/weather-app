@@ -5,9 +5,56 @@ import * as domManager from './js/dom-manager.js';
 import sampleRawData from './js/sample-raw-data.json';
 import WeatherData from './js/weather-data.js';
 
-let currentWeatherData = new WeatherData(sampleRawData);
-domManager.updateAllSections(currentWeatherData);
-domManager.updateBackground(currentWeatherData);
+function updateUserInterface(weatherData) {
+  domManager.updateLocationInfo({
+    location: weatherData.location,
+  });
+
+  domManager.updateMainInfo({
+    temp: weatherData.currentConditions.temp,
+    icon: weatherData.currentConditions.icon,
+    day: weatherData.days[0],
+    feelsLike: weatherData.currentConditions.feelsLike,
+    conditions: weatherData.currentConditions.conditions,
+  });
+
+  domManager.updateDaysForecastCard({
+    description: weatherData.description,
+    days: weatherData.days,
+  });
+
+  domManager.updateHourlyForecastCard({
+    day: weatherData.days[0],
+    next24HoursData: weatherData.getNext24HoursData(),
+  });
+
+  domManager.updatePrecipitationCard({
+    precip: weatherData.currentConditions.precip,
+    precipProb: weatherData.currentConditions.precipProb,
+  });
+
+  domManager.updateHumidityCard({
+    humidity: weatherData.currentConditions.humidity,
+  });
+
+  domManager.updateSunriseSunsetCard({
+    sunrise: weatherData.currentConditions.sunrise,
+    sunset: weatherData.currentConditions.sunset,
+  });
+
+  domManager.updatePressureCard({
+    pressure: weatherData.currentConditions.pressure,
+  });
+
+  domManager.updateWindCard({
+    windSpeed: weatherData.currentConditions.windSpeed,
+    windDir: weatherData.currentConditions.windDir,
+  });
+
+  domManager.updateUvIndexCard({
+    uvIndex: weatherData.currentConditions.uvIndex,
+  });
+}
 
 function handleSubmitQueryForm() {
   const query = domManager.getQueryFormData();
@@ -22,8 +69,8 @@ function handleSubmitQueryForm() {
     .getWeatherData(request)
     .then((weatherData) => {
       currentWeatherData = weatherData;
-      domManager.updateAllSections(currentWeatherData);
-      domManager.updateBackground(currentWeatherData);
+      updateUserInterface(currentWeatherData);
+      domManager.updateBackground({ icon: currentWeatherData.currentConditions.icon });
       domManager.hideQueryErrorMessage();
     })
     .catch(() => {
@@ -36,7 +83,14 @@ function handleSubmitQueryForm() {
 }
 
 const submitQueryFormButton = domManager.getSubmitQueryFormButton();
-const getCurrentWeatherData = () => currentWeatherData;
+let currentWeatherData = null;
 
-domManager.initializeSettingsEventListeners(getCurrentWeatherData);
 submitQueryFormButton.addEventListener('click', handleSubmitQueryForm);
+domManager.initializeSettingsEventListeners(() => {
+  updateUserInterface(currentWeatherData);
+});
+
+// Sample initial data
+currentWeatherData = new WeatherData(sampleRawData);
+updateUserInterface(currentWeatherData);
+domManager.updateBackground({ icon: currentWeatherData.currentConditions.icon });
