@@ -203,7 +203,7 @@ export function updateHourlyForecastCard(weatherData) {
     wrapperDiv.appendChild(precipProbDiv);
 
     tempDiv.classList.add('temperature');
-    tempDiv.innerHTML = `<span>${getConvertedTemperature(hour.temp)}</span><span class="temperature-unit">${currentTemperatureUnit}</span>`;
+    tempDiv.innerHTML = `<span class="value">${getConvertedTemperature(hour.temp)}</span><span class="temperature-unit">${currentTemperatureUnit}</span>`;
 
     hourlyForecastContent.querySelector('.hours').appendChild(timeDiv);
     hourlyForecastContent.querySelector('.hours').appendChild(weatherIconImg);
@@ -330,6 +330,43 @@ export function switchToMetric() {
   usingMetric = true;
   currentPrecipitationUnit = 'mm';
   currentWindSpeedUnit = 'km/h';
+}
+
+/* Initialize event listeners */
+
+export function initializeSettingsEventListeners(getCurrentWeatherData) {
+  const fahrenheitButton = document.querySelector('#fahrenheit-btn');
+  const celsiusButton = document.querySelector('#celsius-btn');
+  const metricButton = document.querySelector('#metric-btn');
+  const imperialButton = document.querySelector('#imperial-btn');
+
+  fahrenheitButton.addEventListener('click', () => {
+    fahrenheitButton.setAttribute('selected', true);
+    celsiusButton.removeAttribute('selected');
+    switchToFahrenheit();
+    updateAllSections(getCurrentWeatherData());
+  });
+
+  celsiusButton.addEventListener('click', () => {
+    celsiusButton.setAttribute('selected', true);
+    fahrenheitButton.removeAttribute('selected');
+    switchToCelsius();
+    updateAllSections(getCurrentWeatherData());
+  });
+
+  imperialButton.addEventListener('click', () => {
+    imperialButton.setAttribute('selected', true);
+    metricButton.removeAttribute('selected');
+    switchToImperial();
+    updateAllSections(getCurrentWeatherData());
+  });
+
+  metricButton.addEventListener('click', () => {
+    metricButton.setAttribute('selected', true);
+    imperialButton.removeAttribute('selected');
+    switchToMetric();
+    updateAllSections(getCurrentWeatherData());
+  });
 }
 
 /* Display/hide feedback fields */

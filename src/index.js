@@ -35,41 +35,8 @@ function handleSubmitQueryForm() {
     });
 }
 
-function initializeSettingsEventListeners() {
-  const fahrenheitButton = document.querySelector('#fahrenheit-btn');
-  const celsiusButton = document.querySelector('#celsius-btn');
-  const metricButton = document.querySelector('#metric-btn');
-  const imperialButton = document.querySelector('#imperial-btn');
-
-  fahrenheitButton.addEventListener('click', () => {
-    fahrenheitButton.setAttribute('selected', true);
-    celsiusButton.removeAttribute('selected');
-    domManager.switchToFahrenheit();
-    domManager.updateAllSections(currentWeatherData);
-  });
-
-  celsiusButton.addEventListener('click', () => {
-    celsiusButton.setAttribute('selected', true);
-    fahrenheitButton.removeAttribute('selected');
-    domManager.switchToCelsius();
-    domManager.updateAllSections(currentWeatherData);
-  });
-
-  imperialButton.addEventListener('click', () => {
-    imperialButton.setAttribute('selected', true);
-    metricButton.removeAttribute('selected');
-    domManager.switchToImperial();
-    domManager.updateAllSections(currentWeatherData);
-  });
-
-  metricButton.addEventListener('click', () => {
-    metricButton.setAttribute('selected', true);
-    imperialButton.removeAttribute('selected');
-    domManager.switchToMetric();
-    domManager.updateAllSections(currentWeatherData);
-  });
-}
-
-initializeSettingsEventListeners();
 const submitQueryFormButton = domManager.getSubmitQueryFormButton();
+const getCurrentWeatherData = () => currentWeatherData;
+
+domManager.initializeSettingsEventListeners(getCurrentWeatherData);
 submitQueryFormButton.addEventListener('click', handleSubmitQueryForm);
