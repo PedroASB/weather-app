@@ -2,8 +2,6 @@ import './css/reset.css';
 import './css/style.css';
 import * as weatherApi from './js/weather-api.js';
 import * as domManager from './js/dom-manager.js';
-import sampleRawData from './js/sample-raw-data.json';
-import WeatherData from './js/weather-data.js';
 
 function updateUserInterface(weatherData) {
   domManager.updateLocationInfo({
@@ -82,15 +80,19 @@ function handleSubmitQueryForm() {
     });
 }
 
-const submitQueryFormButton = domManager.getSubmitQueryFormButton();
 let currentWeatherData = null;
+const submitQueryFormButton = domManager.getSubmitQueryFormButton();
 
 submitQueryFormButton.addEventListener('click', handleSubmitQueryForm);
 domManager.initializeSettingsEventListeners(() => {
   updateUserInterface(currentWeatherData);
 });
 
-// Sample initial data
-currentWeatherData = new WeatherData(sampleRawData);
-updateUserInterface(currentWeatherData);
-domManager.updateBackground({ icon: currentWeatherData.currentConditions.icon });
+// Initializing the page with a sample request
+const initialRequest = weatherApi.createRequest('New York NY USA');
+
+weatherApi.getWeatherData(initialRequest).then((weatherData) => {
+  currentWeatherData = weatherData;
+  updateUserInterface(currentWeatherData);
+  domManager.updateBackground({ icon: currentWeatherData.currentConditions.icon });
+});
