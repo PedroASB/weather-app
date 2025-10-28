@@ -13,55 +13,21 @@ import {
   getWindDirectionFeedback,
   getWindSpeedFeedback,
 } from './weather-feedback.js';
-
-// Icons
-import snowIcon from '../assets/icons/snow-icon.png';
-import rainIcon from '../assets/icons/rain-icon.png';
-import fogIcon from '../assets/icons/fog-icon.png';
-import windIcon from '../assets/icons/wind-icon.png';
-import cloudyIcon from '../assets/icons/cloudy-icon.png';
-import partlyCloudyDayIcon from '../assets/icons/partly-cloudy-day-icon.png';
-import partlyCloudyNightIcon from '../assets/icons/partly-cloudy-night-icon.png';
-import clearDayIcon from '../assets/icons/clear-day-icon.png';
-import clearNightIcon from '../assets/icons/clear-night-icon.png';
 import umbrellaIcon from '../assets/icons/umbrella-icon.svg';
-// Background images
-import clearNightBackground from '../assets/imgs/clear-night-background.jpg';
-import cloudyBackground from '../assets/imgs/cloudy-background.jpg';
-import partlyCloudyDayBackground from '../assets/imgs/partly-cloudy-day-background.jpg';
-import windBackground from '../assets/imgs/wind-background.jpg';
-import rainBackground from '../assets/imgs/rain-background.jpg';
-import snowBackground from '../assets/imgs/snow-background.jpg';
-import fogBackground from '../assets/imgs/fog-background.jpg';
-import partlyCloudyNightBackground from '../assets/imgs/partly-cloudy-night-background.jpg';
-import clearDayBackground from '../assets/imgs/clear-day-background.jpg';
-
-const iconsMap = {
-  snow: snowIcon,
-  rain: rainIcon,
-  fog: fogIcon,
-  wind: windIcon,
-  cloudy: cloudyIcon,
-  'partly-cloudy-day': partlyCloudyDayIcon,
-  'partly-cloudy-night': partlyCloudyNightIcon,
-  'clear-day': clearDayIcon,
-  'clear-night': clearNightIcon,
-};
-
-const backgroundsMap = {
-  snow: `linear-gradient(rgba(136, 148, 167, 0.75) 0 0), url("${snowBackground}")`,
-  rain: `linear-gradient(rgba(120, 140, 173, 0.25) 0 0), url("${rainBackground}")`,
-  fog: `linear-gradient(rgba(108, 120, 138, 0.25) 0 0), url("${fogBackground}")`,
-  wind: `linear-gradient(rgba(83, 101, 126, 0.5) 0 0), url("${windBackground}")`,
-  cloudy: `linear-gradient(rgba(85, 99, 117, 0.5) 0 0), url("${cloudyBackground}")`,
-  'partly-cloudy-day': `linear-gradient(rgba(146, 180, 201, 0.5) 0 0), url("${partlyCloudyDayBackground}")`,
-  'partly-cloudy-night': `linear-gradient(rgba(78, 91, 124, 0.3) 0 0), url("${partlyCloudyNightBackground}")`,
-  'clear-night': `linear-gradient(rgba(78, 91, 124, 0.25) 0 0), url("${clearNightBackground}")`,
-  'clear-day': `linear-gradient(rgba(146, 180, 201, 0.2) 0 0), url("${clearDayBackground}")`,
-};
 
 /* Variables */
 
+const backgroundGradients = {
+  snow: 'linear-gradient(rgba(136, 148, 167, 0.75) 0 0)',
+  rain: 'linear-gradient(rgba(120, 140, 173, 0.25) 0 0)',
+  fog: 'linear-gradient(rgba(108, 120, 138, 0.25) 0 0)',
+  wind: 'linear-gradient(rgba(83, 101, 126, 0.5) 0 0)',
+  cloudy: 'linear-gradient(rgba(85, 99, 117, 0.5) 0 0)',
+  'partly-cloudy-day': 'linear-gradient(rgba(146, 180, 201, 0.5) 0 0)',
+  'partly-cloudy-night': 'linear-gradient(rgba(78, 91, 124, 0.3) 0 0)',
+  'clear-night': 'linear-gradient(rgba(78, 91, 124, 0.25) 0 0)',
+  'clear-day': 'linear-gradient(rgba(146, 180, 201, 0.2) 0 0)',
+};
 let usingCelsius = false;
 let usingMetric = false;
 let currentTemperatureUnit = '°F';
@@ -109,8 +75,12 @@ export function updateMainInfo(weatherData) {
   mainInfo.querySelector('.temperature .value').innerText = getConvertedTemperature(
     weatherData.currentConditions.temp,
   );
+
   mainInfo.querySelector('.icon').alt = weatherData.currentConditions.icon;
-  mainInfo.querySelector('.icon').src = iconsMap[weatherData.currentConditions.icon];
+  import(`../assets/icons/${weatherData.currentConditions.icon}-icon.png`).then((icon) => {
+    mainInfo.querySelector('.icon').src = icon.default;
+  });
+
   mainInfo.querySelector('.temperature .temperature-unit').innerText = currentTemperatureUnit;
   mainInfo.querySelector('.date').innerText = getFormattedDate(weatherData.days[0].date);
 
@@ -145,7 +115,9 @@ export function updateDaysForecastCard(weatherData) {
 
     weatherIconImg.classList.add('icon');
     weatherIconImg.alt = day.icon;
-    weatherIconImg.src = iconsMap[day.icon];
+    import(`../assets/icons/${day.icon}-icon.png`).then((icon) => {
+      weatherIconImg.src = icon.default;
+    });
 
     tempMinDiv.classList.add('temp-min');
     tempMinDiv.innerHTML = `Min: <span class="value">${getConvertedTemperature(day.tempMin)}</span><span class="temperature-unit">${currentTemperatureUnit}</span>`;
@@ -189,7 +161,9 @@ export function updateHourlyForecastCard(weatherData) {
 
     weatherIconImg.classList.add('icon');
     weatherIconImg.alt = hour.icon;
-    weatherIconImg.src = iconsMap[hour.icon];
+    import(`../assets/icons/${hour.icon}-icon.png`).then((icon) => {
+      weatherIconImg.src = icon.default;
+    });
 
     const wrapperDiv = document.createElement('div');
     umbrellaIconImg.alt = 'Precipitation chance';
@@ -288,7 +262,13 @@ export function updateUvIndexCard(weatherData) {
 
 export function updateBackground(weatherData) {
   const body = document.querySelector('body');
-  body.style.backgroundImage = backgroundsMap[weatherData.currentConditions.icon];
+  const gradient = backgroundGradients[weatherData.currentConditions.icon];
+
+  import(`../assets/imgs/${weatherData.currentConditions.icon}-background.jpg`).then(
+    (backgroundImage) => {
+      body.style.backgroundImage = `${gradient}, url(${backgroundImage.default})`;
+    },
+  );
 }
 
 export function updateAllSections(weatherData) {
