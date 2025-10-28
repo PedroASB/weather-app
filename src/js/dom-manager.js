@@ -92,6 +92,10 @@ export function getQueryFormData() {
   return query;
 }
 
+export function getSubmitQueryFormButton() {
+  return document.querySelector('#query-form button[type="submit"]');
+}
+
 /* Update sections */
 
 export function updateLocationInfo(weatherData) {
@@ -340,12 +344,12 @@ export function hideLoadingComponent() {
   loadingComponent.innerHTML = '';
 }
 
-export function showErrorMessage(errorMessage) {
+export function showQueryErrorMessage(errorMessage) {
   const errorField = document.querySelector('#location-info .error');
   errorField.innerText = errorMessage;
 }
 
-export function hideErrorMessage() {
+export function hideQueryErrorMessage() {
   const errorField = document.querySelector('#location-info .error');
   errorField.innerText = '';
 }

@@ -5,7 +5,6 @@ import * as domManager from './js/dom-manager.js';
 import sampleRawData from './js/sample-raw-data.json';
 import WeatherData from './js/weather-data.js';
 
-const submitQueryFormButton = document.querySelector('#query-form button[type="submit"]');
 let currentWeatherData = new WeatherData(sampleRawData);
 domManager.updateAllSections(currentWeatherData);
 domManager.updateBackground(currentWeatherData);
@@ -13,7 +12,7 @@ domManager.updateBackground(currentWeatherData);
 function handleSubmitQueryForm() {
   const query = domManager.getQueryFormData();
   if (query === '') {
-    domManager.showErrorMessage('Enter a location to search for its weather data.');
+    domManager.showQueryErrorMessage('Enter a location to search for its weather data.');
     return;
   }
   const request = weatherApi.createRequest(query);
@@ -25,18 +24,18 @@ function handleSubmitQueryForm() {
       currentWeatherData = weatherData;
       domManager.updateAllSections(currentWeatherData);
       domManager.updateBackground(currentWeatherData);
-      domManager.hideErrorMessage();
+      domManager.hideQueryErrorMessage();
     })
     .catch(() => {
       const errorMessage = 'It was not possible to find this location.';
-      domManager.showErrorMessage(errorMessage);
+      domManager.showQueryErrorMessage(errorMessage);
     })
     .finally(() => {
       domManager.hideLoadingComponent();
     });
 }
 
-function initializeEventListeners() {
+function initializeSettingsEventListeners() {
   const fahrenheitButton = document.querySelector('#fahrenheit-btn');
   const celsiusButton = document.querySelector('#celsius-btn');
   const metricButton = document.querySelector('#metric-btn');
@@ -71,5 +70,6 @@ function initializeEventListeners() {
   });
 }
 
-initializeEventListeners();
+initializeSettingsEventListeners();
+const submitQueryFormButton = domManager.getSubmitQueryFormButton();
 submitQueryFormButton.addEventListener('click', handleSubmitQueryForm);
